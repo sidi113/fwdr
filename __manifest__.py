@@ -32,8 +32,8 @@
         'views/fwdr_shipment.xml',
         'views/fwdr_hbl.xml',                   
         'views/fwdr_job.xml',
-        'report/hbl_report.xml',
-        'report/hbl_report_template.xml'
+        # 'report/hbl_report.xml',
+        # 'report/hbl_report_template.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

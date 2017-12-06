@@ -3,7 +3,7 @@
     <data>
         <report 
             id="report_hbl"
-            string="House BL"
+            string="House B/L"
             model="fwdr.shipment.hbl" 
             report_type="qweb-pdf"
             file="fwdr.report_hbl" 
