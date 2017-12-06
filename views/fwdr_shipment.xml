@@ -33,15 +33,15 @@
                 type="object"
                 class="oe_stat_button"
                 icon="fa-pencil-square-o">
-                <!-- attrs="{'invisible': [('hbl_count', '=', 0)]}"> -->
+                <!-- attrs="{'invisible': [('invoice_count', '=', 0)]}"> -->
                 <field name="hbl_count" widget="statinfo" string="HBLs"/>
             </button>
-            <button name="action_view_job"
+            <button name="action_view_mbl"
                 type="object"
                 class="oe_stat_button"
-                icon="fa-pencil-square-o">
-                <!-- attrs="{'invisible': [('invoice_count', '=', 0)]}"> -->
-                <field name="job_id" widget="statinfo" string="Job"/>
+                icon="fa-pencil-square-o"
+                attrs="{'invisible': [('invoice_count', '=', 0)]}">
+                <field name="mbl_count" widget="statinfo" string="MBLs"/>
             </button>
             <button name="action_view_invoice"
                 type="object"

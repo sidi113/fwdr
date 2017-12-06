@@ -84,7 +84,7 @@ class FwdrShipment(models.Model):
         string="Invoice Status", 
         readonly=True)
         # ], string='Invoice Status', compute='_get_invoiced', store=True, readonly=True)
-    hbl_count = fields.Integer(string='# of HB/L', compute='_hbl_count', readonly=True)
+    hbl_count = fields.Integer(string='# of HB/L', compute='_get_hbl', readonly=True)
     mbl_count = fields.Integer(string='# of MB/L', compute='_get_mbl', readonly=True)
     invoice_count = fields.Integer(string='# of Invoices', compute='_get_invoiced', readonly=True)    
 
@@ -105,22 +105,16 @@ class FwdrShipment(models.Model):
     # order_line = fields.One2many('sale.order.line', 'order_id', string='Order Lines', states={'cancel': [('readonly', True)], 'done': [('readonly', True)]}, copy=True)
 
 
-    @api.depends('hbl.ids')
-    def _hbl_count(self):
-        for r in self:     
-            domain = [
-                # ('state', '!=', 'cancelled'),
-                ('shipment_id', 'in', self.ids),
-            ]
-            hbls = self.env['fwdr.shipment.hbl'].search(domain)
-            r.hbl_count = len(hbls)
+    @api.depends('state')
+    def _get_hbl(self):
+        return True
 
     @api.multi
     def action_view_hbl(self):
         return True
 
     @api.depends('state')
-    def _get_job(self):
+    def _get_mbl(self):
         return True
 
     @api.multi
