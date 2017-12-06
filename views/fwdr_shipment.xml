@@ -1,0 +1,176 @@
+<odoo>
+  <data>
+    <!-- tree view: Shipment -->    
+    <record model="ir.ui.view" id="shipment_tree">
+      <field name="name">Shipment</field>
+      <field name="model">fwdr.shipment</field>
+      <field name="arch" type="xml">
+        <tree delete="false" create="false" copy="false">
+          <field name="shipment_number" string="Shipment"/>
+          <field name="job_number" string="Job"/>
+          <field name="booking_party_id" string="Booking Party"/>
+          <field name="s_shipper_id" string="Shipper"/>
+          <field name="s_consignee_id" string="Consignee"/>
+          <field name="h_dest_port_id" string="Destination Port"/>
+        </tree>
+      </field>
+    </record>
+  
+    <!-- form view: Export Shipment -->    
+    <record model="ir.ui.view" id="shipment_form">
+      <field name="name">Export Shipment</field>
+      <field name="model">fwdr.shipment</field>
+      <field name="domain">[]</field>
+      <field name="context">{}</field>
+      <field name="arch" type="xml">
+        <form string="Shipment" delete="false" create="false" copy="false">
+          <header>
+            <button string="Cancel" type="action" />                        
+            <button string="Create Invoice" type="action" class="btn-primary"/>
+          </header>          
+          <div class="oe_button_box" name="button_box">
+            <button name="action_view_hbl"
+                type="object"
+                class="oe_stat_button"
+                icon="fa-pencil-square-o">
+                <!-- attrs="{'invisible': [('hbl_count', '=', 0)]}"> -->
+                <field name="hbl_count" widget="statinfo" string="HBLs"/>
+            </button>
+            <button name="action_view_job"
+                type="object"
+                class="oe_stat_button"
+                icon="fa-pencil-square-o">
+                <!-- attrs="{'invisible': [('invoice_count', '=', 0)]}"> -->
+                <field name="job_id" widget="statinfo" string="Job"/>
+            </button>
+            <button name="action_view_invoice"
+                type="object"
+                class="oe_stat_button"
+                icon="fa-pencil-square-o">
+                <!-- attrs="{'invisible': [('invoice_count', '=', 0)]}"> -->
+                <field name="invoice_count" widget="statinfo" string="Invoices"/>
+            </button>
+          </div>
+          <div class="oe_title"> 
+            <label for="Shipment ID"/> 
+              <h1><field name="shipment_number"/></h1>
+          </div> 
+          <notebook>
+            <page string="Main" name="main">
+              <group name="group_top"> 
+                <group name="group_left"> 
+                  <field name="job_number"/>                  
+                  <field name="transit_type_id" />
+                </group> 
+                <group name="group_right"> 
+                  <field name="ob_transaction_date" />
+                  <field name="ob_billing_date" />
+                </group> 
+              </group>
+              <group string="Parties"> 
+                <group name="group_left">                   
+                  <field name="booking_party_id"/>
+                  <field name="billing_party_id"/>
+                  <field name="sales_id"/>                  
+                </group> 
+                <group name="group_right"> 
+                  <field name="s_shipper_id"/>
+                  <field name="s_consignee_id"/>
+                  <field name="s_notify_id"/>                  
+                </group> 
+              </group>
+              <separator string="Route" />                
+                <group name="group_route_top"> 
+                  <group name="group_route_left">                     
+                    <field name="h_voyage"/>                           
+                    <field name="h_por_id"/>
+                    <field name="h_load_port_id"/>
+                    <field name="h_dsch_port_id"/>
+                    <field name="h_dest_port_id"/> 
+                    <field name="h_fnd_id" />                                            
+                  </group> 
+                  <group name="group_route_right">   
+                    <field name="h_cutoff" string="Cutoff"/>                                      
+                    <field name="h_etd"  string="POL ETD"/>                    
+                    <field name="h_eta1" string="POD ETA"/>
+                    <field name="h_eta2" string="FND ETA"/>
+                    <field name="h_pol_location_id"/>   
+                    <field name="h_pod_location_id"/>   
+                    <field name="h_pod_contact"/>
+                  </group> 
+                </group>              
+              <notebook> 
+                <page string="Shipment Item">
+                  <field name="hbl_ids">
+                    <tree>
+                      <field name="hbl_number" string="HB/L Number"/>
+                      <field name="h_shipper_id" string="Shipper"/>
+                      <field name="h_consignee_id" string="Consignee"/>
+                      <field name="hbl_quantity" string="Package"/>
+                      <field name="brief_description" string="Description"/>
+                      <field name="hbl_gross_wt" string="Gross Weight"/>
+                      <field name="hbl_volume" string="Volume"/>
+                    </tree>
+                  </field>
+                </page>
+                <page string="Door Pickup">
+                </page>
+                <page string="Door Delivery">
+                </page>
+                <page string="Shipment Note">
+                  <group>
+                    <group>
+                      <field name="bl_type" string="B/L Type" widget="radio"/>
+                      <field name="payment_term" widget="radio"/>
+                      <field name="bl_issue_method" string="Issue method" widget="radio"/>
+                    </group>
+                    <group>
+                      <field name="shipment_note" string="Note"/>
+                    </group>
+                  </group>
+                </page>
+              </notebook>
+            </page>            
+            <page string="Statement">  
+            </page>                         
+          </notebook>
+        </form>
+      </field>
+    </record>
+
+    <!-- actions: Shipment -->    
+    <record model="ir.actions.act_window" id="shipment_action">
+      <field name="name">Export Shipment</field>
+      <field name="res_model">fwdr.shipment</field>  
+      <field name="type">ir.actions.act_window</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+      
+    <record model="ir.actions.act_window.view" id="shipment_actiom_tree">
+      <field name="sequence" eval="1"/>
+      <field name="view_mode">tree</field>
+      <field name="view_id" ref="shipment_tree"/>      
+      <field name="act_window_id" ref="shipment_action"/>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="shipment_actiom_form">
+      <field name="sequence" eval="2"/>
+      <field name="view_mode">form</field>
+      <field name="view_id" ref="shipment_form"/>      
+      <field name="act_window_id" ref="shipment_action"/>
+    </record>
+
+    <!-- menu -->    
+    <menuitem name="Forwarding" id="menu_fwdr"/>    
+
+    <menuitem name="Export" id="menu_ob" parent="menu_fwdr" sequence="1"/>      
+    <menuitem name="Shipment" id="menu_ob_shipment" parent="menu_ob" action="shipment_action" sequence="2" /> 
+    
+    <menuitem name="Import" id="menu_ib" parent="menu_fwdr" sequence="2"/>      
+    <menuitem name="Shipment" id="menu_ib_shipment" parent="menu_ib" action="shipment_action" sequence="3" /> 
+
+
+    
+  </data>
+</odoo>

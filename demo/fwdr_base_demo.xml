@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        
+        <!-- Resource: fwdr.transit.type -->
+        <record id="transit_type_1" model="fwdr.transit.type">
+            <field name="name">Ocean</field>
+            <field name="seqence">1</field>            
+        </record>
+        <record id="transit_type_2" model="fwdr.transit.type">
+            <field name="name">Air</field>
+            <field name="seqence">2</field>            
+        </record>
+        <record id="transit_type_3" model="fwdr.transit.type">
+            <field name="name">Ground</field>
+            <field name="seqence">3</field>            
+        </record>
+       <record id="transit_type_4" model="fwdr.transit.type">
+            <field name="name">Warehousing</field>
+            <field name="seqence">4</field>            
+        </record>
+        <record id="transit_type_5" model="fwdr.transit.type">
+            <field name="name">Others</field>
+            <field name="seqence">5</field>            
+        </record>
+
+
+        <!-- Resource: fwdr.traffic.term -->
+        <record id="traffic_term_1" model="fwdr.traffic.term">
+            <field name="name">CY-CY</field>
+            <field name="seqence">1</field>            
+        </record>
+        <record id="traffic_term_2" model="fwdr.traffic.term">
+            <field name="name">DR-DR</field>
+            <field name="seqence">2</field>            
+        </record>
+        <record id="traffic_term_3" model="fwdr.traffic.term">
+            <field name="name">CY-DR</field>
+            <field name="seqence">3</field>            
+        </record>
+        <record id="traffic_term_4" model="fwdr.traffic.term">
+            <field name="name">DR-CY</field>
+            <field name="seqence">4</field>            
+        </record>
+
+
+        <!-- Resource: fwdr.traffic.mode -->
+        <record id="traffic_mode_1" model="fwdr.traffic.mode">
+            <field name="name">FCL-FCL</field>
+            <field name="seqence">1</field>            
+        </record>
+        <record id="traffic_mode_2" model="fwdr.traffic.mode">
+            <field name="name">LCL-LCL</field>
+            <field name="seqence">2</field>            
+        </record>
+
+
+        <!-- Resource: fwdr.cargo.nature -->
+        <record id="cargo_nature_1" model="fwdr.cargo.nature">
+            <field name="code">GC</field>
+            <field name="name">General</field>
+            <field name="seqence">1</field>            
+        </record>
+        <record id="cargo_nature_3" model="fwdr.cargo.nature">
+            <field name="code">DG</field>
+            <field name="name">Danger</field>
+            <field name="seqence">3</field>            
+        </record>
+        <record id="cargo_nature_2" model="fwdr.cargo.nature">
+            <field name="code">RF</field>
+            <field name="name">Reefer</field>
+            <field name="seqence">2</field>            
+        </record>
+        <record id="cargo_nature_4" model="fwdr.cargo.nature">
+            <field name="code">AW</field>
+            <field name="name">Awkward</field>
+            <field name="seqence">4</field>            
+        </record>
+
+
+        <!-- Resource: fwdr.customs.state -->
+        <record id="customs_state_1" model="fwdr.customs.state">
+            <field name="name">AQI Rejected</field>            
+        </record>
+        <record id="customs_state_2" model="fwdr.customs.state">
+            <field name="name">Customs Manifest Hold</field>                        
+        </record>
+        <record id="customs_state_3" model="fwdr.customs.state">
+            <field name="name">Customs Open Box Exam</field>            
+        </record>
+        <record id="customs_state_4" model="fwdr.customs.state">
+            <field name="name">Customs Rejected</field>            
+        </record>
+        <record id="customs_state_5" model="fwdr.customs.state">
+            <field name="name">Customs Released</field>            
+        </record>
+        <record id="customs_state_6" model="fwdr.customs.state">
+            <field name="name">Customs X-Ray Exam</field>            
+        </record>
+        <record id="customs_state_7" model="fwdr.customs.state">
+            <field name="name">Entry Filling Pending</field>            
+        </record>
+
+
+        <!-- Resource: fwdr.scac.code -->
+        <record id="scac_1" model="fwdr.scac.code">
+            <field name="name">HYDU</field>            
+        </record>
+        <record id="scac_2" model="fwdr.scac.code">
+            <field name="name">AMDH</field>            
+        </record>
+        <record id="scac_3" model="fwdr.scac.code">
+            <field name="name">AMCG</field>            
+        </record>
+        <record id="scac_4" model="fwdr.scac.code">
+            <field name="name">CPJQ</field>            
+        </record>
+        <record id="scac_5" model="fwdr.scac.code">
+            <field name="name">SCJU</field>            
+        </record>
+
+
+        <!-- Resource: fwdr.vessel -->
+        <record id="vessel_1" model="fwdr.vessel">
+            <field name="name">COSCO LONG BEACH</field>            
+        </record>
+        <record id="vessel_2" model="fwdr.vessel">
+            <field name="name">OOCL ITALY</field>            
+        </record>
+        <record id="vessel_3" model="fwdr.vessel">
+            <field name="name">HANJIN CHONGQING</field>            
+        </record>
+        <record id="vessel_4" model="fwdr.vessel">
+            <field name="name">CMA CGM DOLPHIN</field>            
+        </record>
+        <record id="vessel_5" model="fwdr.vessel">
+            <field name="name">BAHIA GRANDE</field>            
+        </record>
+
+
+        <!-- Resource: fwdr.container.type -->
+        <record id="cntr_type_1" model="fwdr.container.type">
+            <field name="name">40TK</field>            
+            <field name="size">40</field>            
+            <field name="report_type">SP</field>            
+            <field name="description">40' Tank Container</field>            
+            <field name="teu">2</field>            
+            <field name="is_reefer">0</field>            
+        </record>
+        <record id="cntr_type_2" model="fwdr.container.type">
+            <field name="name">45HQ</field>            
+            <field name="size">45</field>            
+            <field name="report_type">HQ</field>            
+            <field name="description">45' Hi-Cube Container</field>            
+            <field name="teu">2</field>            
+            <field name="is_reefer">0</field>            
+        </record>
+        <record id="cntr_type_3" model="fwdr.container.type">
+            <field name="name">45OT</field>            
+            <field name="size">45</field>            
+            <field name="report_type">SP</field>            
+            <field name="description">45' Open Top Container</field>            
+            <field name="teu">2</field>            
+            <field name="is_reefer">0</field>            
+        </record>
+        <record id="cntr_type_4" model="fwdr.container.type">
+            <field name="name">45RQ</field>            
+            <field name="size">45</field>            
+            <field name="report_type">RF</field>            
+            <field name="description">45' Refrigerated Container</field>            
+            <field name="teu">2</field>            
+            <field name="is_reefer">1</field>            
+        </record>
+        <record id="cntr_type_5" model="fwdr.container.type">
+            <field name="name">20FR</field>            
+            <field name="size">20</field>            
+            <field name="report_type">SP</field>            
+            <field name="description">20' Flat Rack Container</field>            
+            <field name="teu">1</field>            
+            <field name="is_reefer">0</field>            
+        </record>
+        <record id="cntr_type_6" model="fwdr.container.type">
+            <field name="name">20GP</field>            
+            <field name="size">20</field>            
+            <field name="report_type">GP</field>            
+            <field name="description">20' General Purpose Container</field>            
+            <field name="teu">1</field>            
+            <field name="is_reefer">0</field>            
+        </record>
+        <record id="cntr_type_7" model="fwdr.container.type">
+            <field name="name">20HQ</field>            
+            <field name="size">20</field>            
+            <field name="report_type">HQ</field>            
+            <field name="description">20' Hi-Cube Container</field>            
+            <field name="teu">1</field>            
+            <field name="is_reefer">0</field>            
+        </record>
+        <record id="cntr_type_8" model="fwdr.container.type">
+            <field name="name">20RF</field>            
+            <field name="size">20</field>            
+            <field name="report_type">RF</field>            
+            <field name="description">20' Refrigerated Container</field>            
+            <field name="teu">1</field>            
+            <field name="is_reefer">1</field>            
+        </record>
+        <record id="cntr_type_9" model="fwdr.container.type">
+            <field name="name">20RQ</field>            
+            <field name="size">20</field>            
+            <field name="report_type">RF</field>            
+            <field name="description">20' Reefer Hi-Cube</field>            
+            <field name="teu">1</field>            
+            <field name="is_reefer">1</field>            
+        </record>
+        <record id="cntr_type_10" model="fwdr.container.type">
+            <field name="name">45HQ</field>            
+            <field name="size">45</field>            
+            <field name="report_type">HQ</field>            
+            <field name="description">45' Hi-Cube Container</field>            
+            <field name="teu">2</field>            
+            <field name="is_reefer">0</field>            
+        </record>
+        <record id="cntr_type_11" model="fwdr.container.type">
+            <field name="name">20TK</field>            
+            <field name="size">20</field>            
+            <field name="report_type">SP</field>            
+            <field name="description">20' Tank Container</field>            
+            <field name="teu">1</field>            
+            <field name="is_reefer">0</field>            
+        </record>
+        <record id="cntr_type_12" model="fwdr.container.type">
+            <field name="name">40FR</field>            
+            <field name="size">40</field>            
+            <field name="report_type">SP</field>            
+            <field name="description">40' Flat Rack Container</field>            
+            <field name="teu">2</field>            
+            <field name="is_reefer">0</field>            
+        </record>
+        <record id="cntr_type_13" model="fwdr.container.type">
+            <field name="name">40GP</field>            
+            <field name="size">40</field>            
+            <field name="report_type">GP</field>            
+            <field name="description">40' General Purpose Container</field>            
+            <field name="teu">2</field>            
+            <field name="is_reefer">0</field>            
+        </record>
+        <record id="cntr_type_14" model="fwdr.container.type">
+            <field name="name">40HQ</field>            
+            <field name="size">40</field>            
+            <field name="report_type">HQ</field>            
+            <field name="description">40' Hi-Cube Container</field>            
+            <field name="teu">2</field>            
+            <field name="is_reefer">0</field>            
+        </record>
+        <record id="cntr_type_15" model="fwdr.container.type">
+            <field name="name">40OT</field>            
+            <field name="size">40</field>            
+            <field name="report_type">SP</field>            
+            <field name="description">40' Open Top Container</field>            
+            <field name="teu">2</field>            
+            <field name="is_reefer">0</field>            
+        </record>
+        <record id="cntr_type_16" model="fwdr.container.type">
+            <field name="name">40RF</field>            
+            <field name="size">40</field>            
+            <field name="report_type">RF</field>            
+            <field name="description">40' Refrigerated Container</field>            
+            <field name="teu">2</field>            
+            <field name="is_reefer">1</field>            
+        </record>
+        <record id="cntr_type_17" model="fwdr.container.type">
+            <field name="name">40RQ</field>            
+            <field name="size">40</field>            
+            <field name="report_type">RF</field>            
+            <field name="description">40' Hi-Cube Refrigerated Container</field>            
+            <field name="teu">2</field>            
+            <field name="is_reefer">1</field>            
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,223 @@
+<odoo>
+  <data>
+    <!-- tree view: City -->    
+    <record model="ir.ui.view" id="city_tree">
+      <field name="name">City</field>
+      <field name="model">res.city</field>
+      <field name="arch" type="xml">
+        <tree delete="false" editable="top" default_order="country_id state_id county_id name desc">
+          <field name="name"/>          
+          <field name="country_id"/>         
+          <field name="state_id" />
+          <field name="county_id" />
+          <field name="zipcode" />
+          <field name="unlocode"/>
+          <field name="active" />
+        </tree>
+      </field>
+    </record>
+    
+    <!-- form view: City -->    
+    <record model="ir.ui.view" id="city_form">
+      <field name="name">City</field>
+      <field name="model">res.city</field>
+      <field name="arch" type="xml">
+        <form>
+          <group>
+            <group>
+              <field name="name"/> 
+              <field name="county_id" options='{"no_open": True}'/>         
+              <field name="state_id" options='{"no_open": True}'/>
+              <field name="country_id" options='{"no_open": True}'/>       
+            </group>
+            <group>              
+              <field name="zipcode" />
+              <field name="unlocode"/>
+              <field name="active" />
+            </group>
+          </group>
+        </form>
+      </field>
+    </record>
+
+    <!-- actions: city -->    
+    <record model="ir.actions.act_window" id="city_action">
+      <field name="name">City</field>
+      <field name="res_model">res.city</field>
+      <field name="view_mode">tree</field>
+    </record>
+
+ <!--    <record id="view_country_tree_inherited" model="ir.ui.view">
+      <field name="name">Country</field>
+      <field name="model">res.country</field>
+      <field name="inherit_id" ref="base.view_country_tree"/>
+      <field name="arch" type="xml">
+        <tree delete="false">
+          <field name="code" position="after">
+            <field name="loc_name" attrs="{'invisible': 'self.env.user.lang'=='en'}" />            
+            <field name="currency_id" />
+            <field name="phone_code" string="Calling Code"/>
+          </field>
+        </tree>
+      </field>
+    </record>  -->
+
+<!--     <record id="view_country_form_inherited" model="ir.ui.view">
+      <field name="name">Country</field>
+      <field name="model">res.country</field>
+      <field name="inherit_id" ref="base.view_country_form"/>
+      <field name="arch" type="xml">
+        <field name="name" position="after">
+          <field name="loc_name" attrs="{'invisible': 'self.env.user.lang'=='en'}" />          
+        </field>
+      </field>
+    </record>  -->
+
+<!--     <record id="action_country" model="ir.actions.act_window">
+      <field name="name">Countries</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">res.country</field>
+      <field name="view_type">form</field>
+      <field name="context">{'lang':'None'}</field>
+      <field name="help">Display and manage the list of all countries that can be assigned to your partner records. You can create or delete countries to make sure the ones you are working on will be maintained.</field>
+    </record> -->
+
+
+    <!-- tree view: State -->
+<!--     <record id="view_country_state_tree_inheried" model="ir.ui.view">
+      <field name="name">res.country.state.tree.inheried</field>
+      <field name="model">res.country.state</field>
+      <field name="inherit_id" ref="base.view_country_state_tree"/>
+      <field name="arch" type="xml">
+        <tree delete="false">
+          <field name="name" position="after">
+            <field name="local_name"/>                
+          </field>
+        </tree>
+      </field>
+    </record> -->
+
+    <!-- form view: State -->
+ <!--    <record id="view_country_state_form_inheried" model="ir.ui.view">
+      <field name="name">res.country.state.form.inheried</field>
+      <field name="model">res.country.state</field>
+      <field name="inherit_id" ref="base.view_country_state_form"/>
+      <field name="arch" type="xml">
+        <field name="name" position="after">
+            <field name="local_name"/>                
+          </field>
+      </field>
+    </record> -->
+
+    <!-- tree view: County -->
+    <record model="ir.ui.view" id="county_tree">
+        <field name="name">County</field>
+        <field name="model">res.county</field>
+        <field name="arch" type="xml">
+            <tree string="County" delete="false" editable="top">
+                <field name="name"/>
+                <!-- <field name="local_name"/> -->                
+                <field name="country_id"/>
+                <field name="state_id"/>
+                <field name="active" widget="checkbox"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- form view: County -->
+    <record model="ir.ui.view" id="county_from">
+        <field name="name">County</field>
+        <field name="model">res.county</field>
+        <field name="arch" type="xml">
+            <form string="County">
+                <group>
+                    <field name="name"/>
+                    <!-- <field name="local_name"/> -->
+                    <field name="state_id" options='{"no_open": True}'/>
+                    <field name="country_id" options='{"no_open": True}'/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="county_action">
+      <field name="name">County</field>
+      <field name="res_model">res.county</field>
+      <field name="view_mode">tree</field>
+    </record>   
+
+    <!-- tree view: Port -->
+    <record model="ir.ui.view" id="port_tree">
+        <field name="name">Port</field>
+        <field name="model">fwdr.port</field>
+        <field name="arch" type="xml">
+          <tree string="Port" delete="false" >
+              <field name="code"/>
+              <field name="name"/>
+              <field name="city_id"/>
+              <!-- <field name="county_id"/>  -->
+              <field name="state_id"/>
+              <field name="country_id"/>
+          </tree>
+        </field>
+    </record>
+
+    <!-- form view: Port -->
+    <record model="ir.ui.view" id="port_form">
+        <field name="name">Port</field>
+        <field name="model">fwdr.port</field>
+        <field name="arch" type="xml">
+          <form>
+            <sheet>
+              <div class="oe_title">               
+                <h1><field name="name" class="oe_inline"/></h1>                
+              </div>             
+              <group>
+                <group>
+                  <field name="code"/>
+                  <field name="city_id"/>
+                  <!-- <field name="county_id"/>  -->
+                  <field name="state_id"/>                
+                </group>
+                <group>
+                  <field name="country_id"/>
+                  <field name="active"/> 
+                </group>
+                <field name="terminal_ids"/>
+              </group>
+            </sheet>
+          </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="port_action">
+      <field name="name">Port</field>
+      <field name="res_model">fwdr.port</field>
+      <field name="view_mode">tree,form</field>
+    </record>   
+
+
+    <!-- Top menu item -->    
+    <menuitem name="Base" id="menu_base"/>    
+    
+    <!-- menu categories -->    
+    <menuitem name="Localization" id="menu_geo" parent="menu_base"/> 
+    
+    <!-- menu: Geography -->   
+    <menuitem name="Port" id="menu_port" parent="menu_geo"
+              action="port_action"/>     
+    <menuitem name="City" id="menu_city" parent="menu_geo"
+              action="city_action"/>
+    <menuitem name="County" id="menu_county" parent="menu_geo"
+              action="county_action"/>                                  
+    <menuitem name="State" id="menu_state" parent="menu_geo"
+              action="base.action_country_state"/>  
+    <menuitem name="Country" id="menu_country" parent="menu_geo"
+              action="base.action_country" />       
+    <menuitem name="Country Group" id="menu_country_group" parent="menu_geo"
+              action="base.action_country_group"/>    
+    
+             
+              
+  </data>
+</odoo>

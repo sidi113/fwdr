@@ -1,0 +1,39 @@
+<odoo>
+  <data>
+    <!-- tree view: Export Job -->    
+    <record id="ob_job_tree" model="ir.ui.view">
+            <field name="model">fwdr.job</field>
+            <field name="arch" type="xml">
+                <tree string="Job" editable="top">
+                    <field name="job_number"/>
+                    
+                </tree>
+            </field>
+        </record>
+
+  
+
+
+    <!-- actions opening views: Export Job -->  
+    <record model="ir.actions.act_window" id="ob_job_action">
+      <field name="name">Export Job</field>
+      <field name="res_model">fwdr.job</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="view_mode">tree,form</field>
+      
+    </record>   
+
+  
+    <!-- menu -->    
+    <menuitem name="Forwarding" id="menu_fwdr"/>    
+
+    <menuitem name="Export" id="menu_ob" parent="menu_fwdr" 
+              action="ob_job_action" sequence="1"/>
+    <!-- <menuitem name="Ocean" id="fms.menu_ob_ocean" parent="fms.menu_ob"/>   
+    <menuitem name="LCL Job" id="fms.menu_ob_lcl_job" parent="fms.menu_ob_ocean"
+              action="fms.ob_job_action" sequence="2" />             -->
+
+    <menuitem name="Import" id="menu_ib" parent="menu_fwdr" sequence="2"/>  
+
+  </data>
+</odoo>

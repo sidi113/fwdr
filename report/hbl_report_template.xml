@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_hbl_document">
+    <!-- <t t-call="report.external_layout"> -->
+        <t t-set="doc" t-value="doc" />
+        <div class="page">
+            <div class="oe_structure"/>
+            <!-- Row 1 -->
+            <div class="row">
+                <div class="col-xs-12" style="border:1px solid black;">
+                    <div class="col-xs-9" style="height:60px;">
+                        <h3>AFE Internaltional Group, Inc.
+                            <small> Tel:516-619-0180 Fax:516-619-0181 </small></h3>
+                    </div>
+                    <div class="col-xs-3">
+                        <h3>BILL OF LADING</h3>
+                    </div>
+                </div>                
+            </div>
+
+            <!-- Row 2 -->            
+            <div class="row" style="font-size:10px; ">
+                <div class="col-xs-6" style="border: 1px solid black;">                    
+                    <div class="row">
+                        <div class="col-xs-12" style="height:120px;">
+                            <div class="mt4">SHIPPER/EXPORTER
+                                <small> (please provide complete name and address)</small>
+                            </div>
+                        </div>                    
+                        <div class="col-xs-12" style="height:120px; border-top:1px solid black;">
+                            <div class="mt4">CONSIGNEE
+                                <small> (please provide complete name and address)</small>
+                            </div>
+                        </div> 
+                        <div class="col-xs-12" style="height:120px; border-top: 1px solid black;">                    
+                            <div class="mt4">NOTIFY PARTY
+                                <small> (please provide complete name and address)</small>
+                            </div>
+                        </div>                                          
+                    </div>
+                </div>                
+                <div class="col-xs-6" style="border-bottom:1px solid black; border-right:1px solid black; border-top:1px solid black;">
+                    <div class="row" >
+                        <div class="col-xs-6" style="height:50px;" >
+                            <div class="mt4">BOOKING NO.</div>
+                        </div>
+                        <div class="col-xs-6" style="height:50px; border-left:1px solid black;" >
+                            <div class="mt4">BILL OF LADING NO.</div>
+                        </div>                        
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12" style="height:50px; border-top:1px solid black;" >
+                            <div class="mt4">EXPORT REFERENCES</div>
+                        </div>
+                        <div class="col-xs-12" style="height:90px; border-top: 1px solid black;" >
+                            <div class="mt4">FORWARDING AGENT / FMC NO.</div>
+                        </div>
+                        <div class="col-xs-12" style="height:50px; border-top: 1px solid black;" >
+                            <div class="mt4">POINT AND COUNTRY OF ORIGIN</div>
+                        </div>  
+                        <div class="col-xs-12" style="height:120px; border-top:1px solid black; ">
+                            <div class="mt4">FOR DELIVERY OF GOODS PLEASE APPLY TO</div>                
+                        </div>                     
+                    </div>
+                </div>
+            </div>          
+
+            <!-- Row 3  -->
+            <div class="row" style="font-size:10px; ">
+                <div class="col-xs-6" style="border-bottom:1px solid black; border-right:1px solid black;  border-left:1px solid black;">
+                    <div class="row">
+                        <div class="col-xs-5">
+                            <div class="row" >                        
+                                <div class="col-xs-12" style="height:40px; ">
+                                    <div class="mt4">MODE OF INITIAL CARRIAGE</div>
+                                </div>
+                                 <div class="col-xs-12" style="height:40px; border-top: 1px solid black;">
+                                    <div class="mt4">VESSEL NAME</div>
+                                </div>
+                                <div class="col-xs-12" style="height:40px; border-top: 1px solid black;">
+                                    <div class="mt4">PORT OF DISCHARGE</div>
+                                </div>
+                            </div>
+                        </div>                       
+                        <div class="col-xs-7" style="border-left:1px solid black;">
+                            <div class="row">
+                                <div class="col-xs-12" style="height:40px; ">
+                                    <div class="mt4">PLACE OF INITIAL RECEIPT</div>                                
+                                </div>                                 
+                                <div class="col-xs-12" style="height:40px; border-top: 1px solid black;">
+                                    <div class="mt4">PORT OF LOADING</div>
+                                </div>
+                                
+                                <div class="col-xs-12" style="height:40px; border-top: 1px solid black;">
+                                    <div class="mt4">PLACE OF DELIVERY BY CARRIER</div>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>  
+                <div class="col-xs-6" style="border-bottom:1px solid black; border-right:1px solid black; ">
+                    <div class="row">
+                        <div class="col-xs-12" style="height:60px; border-bottom: 1px solid black;">
+                            <div class="mt4">DOMESTIC ROUTING/EXPORT INSTRUCTIONS</div>   
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6" style="height:60px; " >
+                            <div class="mt4">FREIGHT PAYABLE AT</div>
+                        </div>
+                        <div class="col-xs-6" style="height:60px; border-left: 1px solid black;" >
+                            <div class="mt4">TYPE OF MOVEMENT</div>
+                        </div>
+                    </div>
+                </div> 
+            </div>  
+        </div> 
+    <!-- </t> -->
+</template>
+
+<template id="report_hbl">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="fwdr.report_hbl_document" />
+        </t>
+    </t>
+</template>
+</odoo>

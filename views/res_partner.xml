@@ -1,0 +1,27 @@
+<odoo>
+  <data>
+
+    <!-- Top menu item -->    
+    <menuitem name="Base" id="menu_base"/>    
+    
+    <!-- menu categories -->    
+    <menuitem name="Partner" id="menu_partner" parent="menu_base"/>  
+    <menuitem name="Contact" id="menu_contact" parent="menu_partner"/> 
+   
+    <!-- menu: Partner -->
+    <menuitem name="Customer" id="menu_customer" parent="menu_partner"
+              action="base.action_partner_customer_form"/>
+    <menuitem name="Vendor" id="menu_vendor" parent="menu_partner"
+              action="base.action_partner_supplier_form"/>   
+    <menuitem name="Other Partner" id="menu_other_partner" parent="menu_partner"
+              action="base.action_partner_other_form"/> 
+
+    <!-- menu: Contact -->
+    <menuitem name="Contact Tag" id="menu_contact_tag" parent="menu_contact"
+              action="base.action_partner_category_form"/>
+    <menuitem name="Contact Title" id="menu_contact_title" parent="menu_contact"
+              action="base.action_partner_title_contact"/>
+    
+
+  </data>
+</odoo>

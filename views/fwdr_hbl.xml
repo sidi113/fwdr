@@ -1,0 +1,74 @@
+<odoo>
+  <data>
+    <!-- tree view: House B/L -->    
+    <record model="ir.ui.view" id="hbl_tree">
+      <field name="name">House B/L</field>
+      <field name="model">fwdr.shipment.hbl</field>
+      <field name="arch" type="xml">
+        <tree delete="false" create="false" copy="false">
+          <field name="hbl_number"/>
+          <field name="shipment_id"/>
+          <field name="job_id"/>
+          <field name="h_shipper_id"/>
+          <field name="h_consignee_id"/>
+        </tree>
+      </field>
+    </record>
+    
+    <!-- form view: House B/L -->    
+    <record model="ir.ui.view" id="hbl_form">
+      <field name="name">House B/L</field>
+      <field name="model">fwdr.shipment.hbl</field>
+      <field name="arch" type="xml">
+        <form string="House B/L" delete="false" create="false" copy="false">
+          <sheet>
+            <header>
+              <button string="Print" type="action" class="btn-primary"/>            
+            </header>  
+            <group>
+              <field name="hbl_number"/>
+              <group>  
+                <label for="h_shipper_id" /> 
+                <div>                                       
+                  <field name="h_shipper_id"/>
+                  <field name="shipper" />
+                </div>
+                <field name="hbl_quantity"/>
+                <field name="brief_description"/>
+                <field name="marks"/>
+              </group>
+              <group>
+                <label for="h_consignee_id" /> 
+                <div>                                       
+                  <field name="h_consignee_id"/>
+                  <field name="consignee" />
+                </div>
+                <field name="hbl_gross_wt"/>
+                <field name="chargeable_wt"/>
+                <field name="full_description"/>
+              </group>
+              <field name="bl_remark"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+    
+    <record model="ir.actions.act_window" id="hbl_action">
+      <field name="name">House Bill</field>
+      <field name="res_model">fwdr.shipment.hbl</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    
+
+     <!-- menu -->    
+    <menuitem name="Forwarding" id="menu_fwdr"/>    
+
+    <menuitem name="Export" id="menu_ob" parent="menu_fwdr" sequence="1"/>      
+    <menuitem name="House B/L" id="menu_hbl" parent="menu_ob" action="hbl_action" sequence="3" /> 
+
+
+  </data>
+</odoo>
