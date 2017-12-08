@@ -38,7 +38,7 @@ class FwdrJob(models.Model):
     m_pod_contact = fields.Char(string="POD Contact")    
     m_load_port_id = fields.Many2one('fwdr.port', string="Load Port")
     m_dsch_port_id = fields.Many2one('fwdr.port', string="Discharge Port")
-    m_dest_port_id = fields.Many2one('fwdr.port', sting="Destination Port")
+    m_dest_port_id = fields.Many2one('fwdr.port', string="Destination Port")
     m_fnd_id = fields.Many2one('res.city', string="Delivery Place")
     m_voyage_id = fields.Many2one('fwdr.vessel.schedule')
     m_voyage = fields.Char(string="Voyage/Flight")    
@@ -54,31 +54,87 @@ class FwdrJob(models.Model):
 
     # status
     ob_active = fields.Boolean()
-    state = fields.Char()    
+    state = fields.Selection([
+        ('open','Open'),
+        ('compelte','Complete'),
+        ('lock','Lock'),
+        ('cancel','Cancel')],
+        default='open')    
     ob_invoice_count = fields.Integer(string='# Invoices', compute='_ob_invoice_count')
     shipment_count = fields.Integer(string='# Shipments', compute='_shipment_count')
     hbl_count = fields.Integer(string='# House B/L', compute='_hbl_count')
 
+    @api.multi
+    def action_create_shipment(self):
+        r = self
+        ctx = dict(
+            default_job_id=r.id, 
+            default_h_pol_location_id = r.m_pol_location_id.id,
+            default_h_pol_contact = r.m_pol_contact,
+            default_h_pod_location_id = r.m_pod_location_id.id,
+            default_h_pod_contact = r.m_pod_contact,
+            default_h_load_port_id = r.m_load_port_id.id,
+            default_h_dsch_port_id = r.m_dsch_port_id.id,
+            default_h_dest_port_id = r.m_dest_port_id.id,
+            default_h_fnd_id = r.m_fnd_id.id,
+            default_h_voyage_id = r.m_voyage_id.id,
+            default_h_voyage = r.m_voyage,
+            default_h_cutoff = r.m_cutoff,
+            default_h_etd = r.m_etd,
+            default_h_eta1 = r.m_eta1,
+            default_h_eta2 = r.m_eta2,
+        )
+        return {
+            'name': 'New Shipment',
+            'type': 'ir.actions.act_window',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'fwdr.shipment',
+            'views': [(self.env.ref('fwdr.shipment_form').id, 'form')],
+            'view_id': self.env.ref('fwdr.shipment_form').id,
+            # 'target': 'new',
+            'context': ctx,
+        }        
+
+
     @api.depends('shipment_ids')    
     def _shipment_count(self):  
-        for r in self:     
-            domain = [
-                # ('state', '!=', 'cancelled'),
-                ('job_id', 'in', self.ids),
-            ]
-            shipments = self.env['fwdr.shipment'].search(domain)
-            r.shipment_count = len(shipments)
+        # for r in self:         
+        shipments = self.mapped('shipment_ids')
+        self.shipment_count = len(shipments)
 
     @api.multi
     def action_view_shipment(self):
-        self.ensure_one()
-        return self.env.ref('fwdr.shipment_action')
+    	# action = {}
+    	shipments = self.mapped('shipment_ids')                              
+        action = self.env.ref('fwdr.shipment_action').read()[0]
+        if len(shipments) > 1:
+            action['domain'] = [('id', 'in', shipments.ids)]
+        elif len(shipments) == 1:
+            action['views'] = [(self.env.ref('fwdr.shipment_form').id, 'form')]
+            action['res_id'] = shipments.ids[0]
+        else:
+            action = {'type': 'ir.actions.act_window_close'}
+    	return action
 
-        # {'type': 'ir.actions.act_window',
+    	# if len(shipments) == 1:
+        # 	action = {'type': 'ir.actions.act_window',
         #         'res_model': 'fwdr.shipment',
-        #         'view_mode': 'tree'
-        #         # 'res_id': self.product_tmpl_id.id,
+        #         # 'view_mode': 'form',
+        #         "views": [(self.env.ref('fwdr.shipment_form').id, 'form')],                
+        #         'res_id': shipments.id,
         #         }
+        # else:        	
+        # 	# shipments = self.env['fwdr.shipment'].search(domain)
+        # 	action = {'type': 'ir.actions.act_window',
+        #         'res_model': 'fwdr.shipment',                
+        #         # 'view_mode': 'tree',
+        #         "views": [(self.env.ref('fwdr.shipment_tree').id, 'tree')],
+        #         'domain': [('id', 'in', shipments.ids),],                
+        #         } 
+
+        # self.ensure_one()
+        # return self.env.ref('fwdr.shipment_action')
 
         #         invoices = self.mapped('invoice_ids')
         # action = self.env.ref('account.action_invoice_tree1').read()[0]
@@ -93,23 +149,30 @@ class FwdrJob(models.Model):
 
 
     @api.depends('shipment_ids')
-    def _hbl_count(self):
-        for r in self:     
-            domain = [
-                # ('state', '!=', 'cancelled'),
-                ('job_id', 'in', self.ids),
-            ]
-            shipments = self.env['fwdr.shipment'].search(domain)
-            domain1 = [
-                # ('state', '!=', 'cancelled'),
-                ('shipment_id', 'in', shipments.ids),
-            ]
-            hbls = self.env['fwdr.shipment.hbl'].search(domain)
-            r.hbl_count = len(hbls)
+    def _hbl_count(self):     		        
+    	shipments = self.mapped('shipment_ids')    	
+        domain = [                
+            ('shipment_id', 'in', shipments.ids),
+        ]
+        hbls = self.env['fwdr.shipment.hbl'].search(domain)
+        self.hbl_count = len(hbls)
 
     @api.multi
     def action_view_hbl(self):
-        return True
+        shipments = self.mapped('shipment_ids')    	
+        domain = [                
+            ('shipment_id', 'in', shipments.ids),
+        ]
+        hbls = self.env['fwdr.shipment.hbl'].search(domain)
+        action = self.env.ref('fwdr.hbl_action').read()[0]
+        if len(hbls) > 1:
+            action['domain'] = [('id', 'in', hbls.ids)]
+        elif len(hbls) == 1:
+            action['views'] = [(self.env.ref('fwdr.hbl_form').id, 'form')]
+            action['res_id'] = hbls.ids[0]
+        else:
+            action = {'type': 'ir.actions.act_window_close'}        
+    	return action
 
     @api.depends('state')
     def _get_mbl(self):

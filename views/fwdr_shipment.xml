@@ -5,7 +5,7 @@
       <field name="name">Shipment</field>
       <field name="model">fwdr.shipment</field>
       <field name="arch" type="xml">
-        <tree delete="false" create="false" copy="false">
+        <tree string="Shipment" delete="false" create="false" copy="false">
           <field name="shipment_number" string="Shipment"/>
           <field name="job_number" string="Job"/>
           <field name="booking_party_id" string="Booking Party"/>
@@ -18,15 +18,14 @@
   
     <!-- form view: Export Shipment -->    
     <record model="ir.ui.view" id="shipment_form">
-      <field name="name">Export Shipment</field>
+      <field name="name">Shipment</field>
       <field name="model">fwdr.shipment</field>
       <field name="domain">[]</field>
       <field name="context">{}</field>
       <field name="arch" type="xml">
         <form string="Shipment" delete="false" create="false" copy="false">
-          <header>
-            <button string="Cancel" type="action" />                        
-            <button string="Create Invoice" type="action" class="btn-primary"/>
+          <header>            
+            <button string="Create Invoice" type="action" class="btn-primary"/>                                    
           </header>          
           <div class="oe_button_box" name="button_box">
             <button name="action_view_hbl"
@@ -59,7 +58,7 @@
             <page string="Main" name="main">
               <group name="group_top"> 
                 <group name="group_left"> 
-                  <field name="job_number"/>                  
+                  <field name="job_id"/>                  
                   <field name="transit_type_id" />
                 </group> 
                 <group name="group_right"> 
@@ -138,9 +137,9 @@
       </field>
     </record>
 
-    <!-- actions: Shipment -->    
+    <!-- actions: Export Shipment -->    
     <record model="ir.actions.act_window" id="shipment_action">
-      <field name="name">Export Shipment</field>
+      <field name="name">Shipment</field>
       <field name="res_model">fwdr.shipment</field>  
       <field name="type">ir.actions.act_window</field>
       <field name="view_type">form</field>

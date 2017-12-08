@@ -2,22 +2,23 @@
   <data>
     <!-- tree view: Export Job -->    
     <record model="ir.ui.view" id="ob_job_tree">
-      <field name="name">Export Job</field>
+      <field name="name">Job</field>
       <field name="model">fwdr.job</field>
       <field name="arch" type="xml">
         <tree delete="false">
           <field name="job_number"/>          
+          <field name="shipment_ids" widget="one2many"/>          
           <field name="ob_transaction_date"/>
-          <field name="ob_billing_date"/>
+          <!-- <field name="ob_billing_date"/> -->
           <field name="transit_type_id"/>
-          <field name="traffic_mode"/>
+          <!-- <field name="traffic_mode"/> -->
           <field name="m_load_port_id"/>
           <field name="m_dsch_port_id"/>
           <field name="m_dest_port_id"/>
           <field name="m_fnd_id"/>
           <field name="m_voyage"/>
           <field name="m_etd"/>
-          <field name="service_contract"/>
+          <!-- <field name="service_contract"/> -->
           <field name="ob_office_id"/>
         </tree>
       </field>
@@ -25,30 +26,31 @@
 
     <!-- form view: Export Job -->  
     <record model="ir.ui.view" id="ob_job_form">
-      <field name="name">Export Job</field>
+      <field name="name">Job</field>
       <field name="model">fwdr.job</field>
       <field name="domain">[]</field>
-      <field name="context">{}</field>
+      <field name="context">{'default_ob_transaction_date':fields.Date.today(),
+                            'default_ob_office_id':self.env.user.company_id}</field>
       <field name="arch" type="xml">
         <form string="Export Job" delete="false">
           <header>            
-            <!-- <button string="Create Shipment" type="action" class="btn-primary" /> -->
-            <button string="Terminate" type="action"/>
-            <button string="Cancel" type="action"/>
-            <!-- <button name="action_ba_send" string="Send BA" type="object" states="ba,confirm" class="btn-primary"/>
-            <button name="print_ba" string="Print" type="object" states="ba,confirm" class="btn-primary"/>
-            <button name="action_cancel" states="open,ba,confirm" type="object" string="Cancel"/>
-            <button name="action_open" states="cancel" type="object" string="Open"/>
-            <button name="action_done" type="object" string="Locked" states="sa,confirm,load"
-                help="If the sale is locked, you can not modify it anymore. However, you will still be able to invoice or deliver."/>
-            <field name="state" widget="statusbar" statusbar_visible="open,confirm,load,done"/> -->            
+            <button name="action_create_shipment" string="Create Shipment" 
+              type="object" class="btn-primary"  states="open" />
+            <!-- <button string="Terminate" type="action"/> -->
+            <button string="Cancel" type="action" states="open"/>
+            <!-- <button name="action_ba_send" string="Send BA" type="object" states="ba,confirm" class="btn-primary"/> -->
+            <!-- <button name="print_ba" string="Print" type="object" states="ba,confirm" class="btn-primary"/> -->
+            <!-- <button name="action_cancel" states="open,ba,confirm" type="object" string="Cancel"/> -->
+            <!-- <button name="action_open" states="cancel" type="object" string="Open"/> -->
+            <!-- <button name="action_done" type="object" string="Locked" states="sa,confirm,load"> -->                
+            <field name="state" widget="statusbar" statusbar_visible="open,compelte,lock"/>
           </header>
           <div class="oe_button_box" name="button_box">
             <button name="action_view_shipment"
                 type="object"
                 class="oe_stat_button"
-                icon="fa-pencil-square-o">
-                <!-- attrs="{'invisible': [('shipment_count', '=', 0)]}"> -->
+                icon="fa-pencil-square-o"
+                attrs="{'invisible': [('shipment_count', '=', 0)]}">
                 <field name="shipment_count" widget="statinfo" string="Shipments"/>
             </button>
             <button name="action_view_hbl"
@@ -76,7 +78,7 @@
                 <group name="group_left">                                  
                   <field name="transit_type_id"/>
                   <!-- domain="[('display_name', 'ilike', 'Oce')]"  -->
-                  <field name="ob_transaction_date" />
+                  <field name="ob_transaction_date" context="{'default_ob_transaction_date':fields.Date.today()}" />
                   <field name="ob_billing_date" />
                 </group> 
                 <group name="group_right"> 
@@ -161,7 +163,7 @@
 
     <!-- actions opening views: Export Job -->  
     <record model="ir.actions.act_window" id="ob_job_action">
-      <field name="name">Export Job</field>
+      <field name="name">Job</field>
       <field name="res_model">fwdr.job</field>
       <field name="type">ir.actions.act_window</field>
       <field name="view_mode">tree,form</field>

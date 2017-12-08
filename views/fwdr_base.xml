@@ -306,14 +306,14 @@
     
     <!-- menu categories -->    
     <menuitem name="Partner" id="menu_partner" parent="menu_base"/>    
-    <menuitem name="Service" id="menu_service" parent="menu_base"/>
+    <menuitem name="Configuration" id="menu_service" parent="menu_base"/>
     <menuitem name="Vessel Schedule" id="menu_vsl_schedule" parent="menu_base"/>
     <menuitem name="Carrier" id="menu_carrier" parent="menu_partner"/>
 
-    <menuitem name="Vessel" id="menu_vessel" parent="menu_vsl_schedule"
+    <!-- <menuitem name="Vessel" id="menu_vessel" parent="menu_vsl_schedule"
               action="vessel_action"/>                     
     <menuitem name="Schedule" id="menu_voyage" parent="menu_vsl_schedule"
-              action="vessel_schedule_action"/>                                   
+              action="vessel_schedule_action"/>   -->                                 
 
     <!-- menu Carrier -->
     <menuitem name="Lines" id="menu_lines" parent="menu_carrier"

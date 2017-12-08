@@ -16,9 +16,11 @@ class FwdrShipment(models.Model):
 
     # Shipment route
     h_por_id = fields.Many2one('res.city', string="Pickup Place")
-    h_pol_location_id = fields.Char(string="POL Location")
+    h_pol_location_id = fields.Many2one('res.partner', string="POL Location", 
+        domain="[('port_id', '=', m_load_port_id)]")
     h_pol_contact = fields.Char(string="POL Contact")
-    h_pod_location_id = fields.Char(string="POD Location")
+    h_pod_location_id = fields.Many2one('res.partner', string="POD Location",
+        domain="[('port_id', '=', m_dest_port_id)]")  
     h_pod_contact = fields.Char(string="POD Contact")    
     h_load_port_id = fields.Many2one('fwdr.port', string="Load Port")
     h_dsch_port_id = fields.Many2one('fwdr.port', string="Discharge Port")

@@ -5,7 +5,7 @@
       <field name="name">House B/L</field>
       <field name="model">fwdr.shipment.hbl</field>
       <field name="arch" type="xml">
-        <tree delete="false" create="false" copy="false">
+        <tree string="House B/L" delete="false" create="false" copy="false">
           <field name="hbl_number"/>
           <field name="shipment_id"/>
           <field name="job_id"/>
@@ -21,10 +21,10 @@
       <field name="model">fwdr.shipment.hbl</field>
       <field name="arch" type="xml">
         <form string="House B/L" delete="false" create="false" copy="false">
-          <sheet>
-            <header>
+          <header>
               <button string="Print" type="action" class="btn-primary"/>            
-            </header>  
+          </header> 
+          <sheet>             
             <group>
               <field name="hbl_number"/>
               <group>  
