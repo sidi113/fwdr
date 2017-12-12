@@ -56,9 +56,9 @@ class FwdrJob(models.Model):
     ob_active = fields.Boolean()
     state = fields.Selection([
         ('open','Open'),
-        ('compelte','Complete'),
-        ('lock','Lock'),
-        ('cancel','Cancel')],
+        ('compelte','Completed'),
+        ('lock','Locked'),
+        ('cancel','Cancelled')],
         default='open')    
     ob_invoice_count = fields.Integer(string='# Invoices', compute='_ob_invoice_count')
     shipment_count = fields.Integer(string='# Shipments', compute='_shipment_count')
@@ -69,18 +69,18 @@ class FwdrJob(models.Model):
         r = self
         ctx = dict(
             default_job_id=r.id, 
-            default_h_pol_location_id = r.m_pol_location_id.id,
-            default_h_pol_contact = r.m_pol_contact,
-            default_h_pod_location_id = r.m_pod_location_id.id,
-            default_h_pod_contact = r.m_pod_contact,
-            default_h_load_port_id = r.m_load_port_id.id,
-            default_h_dsch_port_id = r.m_dsch_port_id.id,
+            # default_h_pol_location_id = r.m_pol_location_id.id,
+            # default_h_pol_contact = r.m_pol_contact,
+            # default_h_pod_location_id = r.m_pod_location_id.id,
+            # default_h_pod_contact = r.m_pod_contact,
+            # default_h_load_port_id = r.m_load_port_id.id,
+            # default_h_dsch_port_id = r.m_dsch_port_id.id,
             default_h_dest_port_id = r.m_dest_port_id.id,
             default_h_fnd_id = r.m_fnd_id.id,
-            default_h_voyage_id = r.m_voyage_id.id,
-            default_h_voyage = r.m_voyage,
-            default_h_cutoff = r.m_cutoff,
-            default_h_etd = r.m_etd,
+            # default_h_voyage_id = r.m_voyage_id.id,
+            # default_h_voyage = r.m_voyage,
+            # default_h_cutoff = r.m_cutoff,
+            # default_h_etd = r.m_etd,
             default_h_eta1 = r.m_eta1,
             default_h_eta2 = r.m_eta2,
         )
@@ -228,6 +228,7 @@ class FwdrJobMbl(models.Model):
 class FwdrJobContainer(models.Model):
     _name = 'fwdr.job.container'
     _rec_name = 'container_number'
+    _order = 'container_number aesc'
 
     container_number = fields.Char(string="Container Number")
     type_id = fields.Many2one('fwdr.container.type', string="Type")

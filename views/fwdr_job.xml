@@ -159,14 +159,23 @@
     </record>   
 
  
-
+    <record model="ir.ui.view" id="job_calendar">  
+      <field name="model">fwdr.job</field>  
+        <field name="arch" type="xml">  
+        <calendar date_start="m_etd" quick_add="1" date_stop="m_etd" 
+             color="job_number" mode="month" >  
+            <field name="job_number" />  
+            <field name="m_voyage" />              
+        </calendar>  
+      </field>  
+    </record>  
 
     <!-- actions opening views: Export Job -->  
     <record model="ir.actions.act_window" id="ob_job_action">
       <field name="name">Job</field>
       <field name="res_model">fwdr.job</field>
       <field name="type">ir.actions.act_window</field>
-      <field name="view_mode">tree,form</field>
+      <field name="view_mode">tree,form,calendar</field>
       <field name="domain">[]</field>
       <field name="context">{}</field>
     </record>   
