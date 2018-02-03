@@ -20,20 +20,25 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'product', 'account'],
+    'depends': ['base', 'web', 'product', 'account', ],
 
     # always loaded
     'data': [
-        # 'views/test.xml'
-        # 'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
+        'security/job_access_rules.xml',
         'views/fwdr_location.xml',
         'views/res_partner.xml',
         'views/fwdr_base.xml',   
-        'views/fwdr_shipment.xml',
+        'views/fwdr_shipment_new.xml',
+        'views/fwdr_shipment_new1.xml',
+        # 'views/fwdr_shipment_ib.xml',
         'views/fwdr_hbl.xml',                   
-        'views/fwdr_job.xml',
+        'views/fwdr_job_new.xml',
+        # 'views/fwdr_job_ib.xml',
         # 'report/hbl_report.xml',
         # 'report/hbl_report_template.xml'
+        'views/fwdr_template.xml',
+        'data/data.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
