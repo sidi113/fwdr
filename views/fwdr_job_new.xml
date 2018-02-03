@@ -1,0 +1,345 @@
+<odoo>
+<data>
+
+
+<!-- Job tree view -->    
+<record id="view_job_tree" model="ir.ui.view">
+  <field name="name">fwdr.job.tree</field>
+  <field name="model">fwdr.job</field>
+  <field name="arch" type="xml">
+    <tree decoration-muted="state=='cancel'">
+      <field name="job_number"/>          
+      <field name="shipment_ids" />          
+      <field name="transit_type_id"/>
+      <field name="load_port_id"/>
+      <field name="dsch_port_id"/>
+      <field name="m_dest_port_id"/>
+      <field name="m_fnd_id"/>
+      <field name="voyage"/>
+      <field name="etd"/>
+      <field name="ob_office_id"/>
+      <field name="ib_office_id"/>
+      <field name="state"/>
+    </tree>
+  </field>
+</record> 
+
+<!-- Job form view -->  
+<record id="view_job_form" model="ir.ui.view">
+  <field name="name">fwdr.job.form</field>
+  <field name="model">fwdr.job</field>         
+  <field name="arch" type="xml">
+    <form string="Job">
+      <header>            
+        <button name="action_create_shipment" string="Create Shipment" type="object" class="btn-primary" 
+          invisible="context.get('incoming')" 
+          attrs="{'invisible':['|', ('state','not in',('draft','open'))]}"/>            
+        <!-- <button name="action_complete" invisible="context.get('incoming')"  states="open,ib_start" type="object" string="Complete"/> -->
+        <!-- <button name="action_lock" states="open,ib_start,compelte" type="object" string="Lock"/> -->
+        <button name="action_cancel" type="object" string="Cancel" invisible="context.get('incoming')" 
+        	attrs="{'invisible':['|',
+                    ('job_number','=','New'),
+        						('ib_start','=', True), 
+        						('state','not in',('draft','open'))]}"/>
+        <button name="action_reactive" states="cancel" type="object" string="Reactive"/>
+        <button name="action_ib_start" type="object" string="I/B Start"
+          invisible="context.get('ob') or context.get('ib')" attrs="{'invisible':[('ib_start','=', True)]}" />
+        <field name="state" widget="statusbar" statusbar_visible="open,ib_start,complete"/>
+      </header>
+      <sheet>
+        <div class="oe_button_box" name="button_box">
+          <button name="action_view_shipment" type="object" class="oe_stat_button" icon="fa-globe-square-o"
+              attrs="{'invisible': [('shipment_count', '=', 0)]}">
+              <field name="shipment_count" widget="statinfo" string="Shipments"/>
+          </button>
+          <button name="action_view_hbl" type="object" class="oe_stat_button" icon="fa-copy-square-o"
+              attrs="{'invisible': ['|',('hbl_count', '=', 0),('ib_start','=', False)]}">
+              <field name="hbl_count" widget="statinfo" string="House B/Ls"/>
+          </button>            
+          <!-- <button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-pencil-square-o"
+              attrs="{'invisible': [('invoice_count', '=', 0)]}">
+              <field name="invoice_count" widget="statinfo" string="Invoices"/>
+          </button> -->
+        </div>
+        <div class="oe_title"> 
+          <h2>
+            <field name="job_number" />
+          </h2>
+        </div> 
+        <notebook>
+          <page string="Overview" name="overview">
+            <group>
+              <group name="group_left">
+                <field name="transit_type_id" attrs="{'readonly':[('state', 'not in', ('draft','open'))]}"/>             
+                <!-- domain="[('name', '=', 'Ocean')]"  -->
+                <field name="ob_transaction_date" readonly="1" invisible="context.get('ib')"/>                
+                <field name="ib_transaction_date" readonly="1" invisible="context.get('ob')"/>
+                <field name="ob_billing_date" readonly="1" invisible="context.get('ib')"/>
+                <field name="ib_billing_date" readonly="1" invisible="context.get('ob')"/>
+                <field name="ob_office_id" readonly="context.get('ob')"/>
+                <field name="ib_office_id" readonly="context.get('ib')" /> 
+                <field name="ib_start" invisible="1"/>
+                <field name="id" invisible="1"/>
+              </group>
+              <group>
+                <field name="mbl_ids" nolabel="1">
+                    <tree editable="bottom">
+                      <field name="bl_type"/>
+                      <field name="mbl_number"/>
+                      <field name="piece_count"/>                      
+                    </tree>                 
+                  </field> 
+              </group>
+            </group>
+            <group name="group_top" string="Route">
+              <group name="group_route_left">                  
+                <label for="load_port_id"/>
+                <div>
+                  <field name="load_port_id"  context="{'show_full_name': 1}" options='{"always_reload": True}'
+                    attrs="{'readonly': ['!',('ib_start', '=', True),('state', 'not in', ('draft','open'))]}"/>
+                  <field name="pol_location_id" class="oe_inline"
+                    attrs="{'readonly': ['!',('ib_start', '=', True),('state', 'not in', ('draft','open'))]}"/>
+                  <field name="pol_contact" class="oe_inline"
+                    attrs="{'readonly': ['!',('ib_start', '=', True),('state', 'not in', ('draft','open'))]}"/>
+                </div>
+                <field name="dsch_port_id" context="{'show_full_name': 1}"  options='{"always_reload": True}'
+                  attrs="{'readonly': [('state', 'not in', ('draft','open'))]}"/>
+                <label for="m_dest_port_id"/>
+                <div>
+                  <field name="m_dest_port_id" context="{'show_full_name': 1}"  options='{"always_reload": True}'
+                    attrs="{'readonly': [('state', 'not in', ('draft','open'))]}"/>
+                  <field name="m_pod_location_id" class="oe_inline" 
+                    attrs="{'readonly': [('state', 'not in', ('draft','open'))]}"/>  
+                  <field name="m_pod_contact" class="oe_inline" 
+                    attrs="{'readonly': [('state', 'not in', ('draft','open'))]}"/>                 
+                </div>
+                <field name="m_fnd_id" context="{'show_full_name': 1}" options='{"always_reload": True}'
+                  attrs="{'readonly': [('state', 'not in', ('draft','open'))]}"/>
+              </group> 
+              <group name="group_route_right">   
+                <field name="voyage" 
+                  attrs="{'readonly': ['!',('ib_start', '=', True),('state', 'not in', ('draft','open'))]}"/>
+                <field name="cutoff" 
+                  attrs="{'readonly': ['!',('ib_start', '=', True),('state', 'not in', ('draft','open'))]}"/>
+                <field name="etd" 
+                  attrs="{'readonly': ['!',('ib_start', '=', True),('state', 'not in', ('draft','open'))]}"/>
+                <field name="m_eta1" attrs="{'readonly': [('state', 'not in', ('draft','open'))]}"/>
+                <field name="m_eta2" attrs="{'readonly': [('state', 'not in', ('draft','open'))]}"/>
+              </group>  
+            </group>
+            <separator string="Shipment"/>
+            <field name="shipment_ids" nolabel="1" mode="tree">
+              <tree>
+                <field name="shipment_number"/>
+                <field name="booking_party_id"/>
+                <field name="consignee_id"/>
+                <field name="h_dest_port_id"/>
+                <field name="h_fnd_id"/>
+              </tree>
+              <kanban >
+                <!-- create="false" -->
+                <field name="shipment_number" />   
+                <templates>                                    	
+                  <t t-name="kanban-box" >                        	
+                    <div t-attf-class=" oe_kanban_global_click" >
+                     	<div class="panel panel-default">
+  	            	    <div class="panel-body ">
+                          <span ><t t-esc="record.shipment_number.value"/></span>
+                        </div>
+                      </div>
+                    </div>	                            
+                  </t>
+                </templates>
+              </kanban>
+         	  </field>
+          </page> 
+          <page string="Container">
+            <group name="group_route_right">   
+                  <field name="container_ids" nolabel="1">
+                    <tree editable="bottom">
+                      <field name="type_id"/>
+                      <field name="container_number" string="Container#" />                      
+                      <field name="seal_number" string="Seal#" />
+                    </tree>                  
+                  </field>
+                  <separator/>
+                  <field name="container_units" class="oe_subtotal_footer_separator" readonly="1"/>
+                  <field name="container_teus" class="oe_subtotal_footer_separator" readonly="1"/>
+                  <field name="container_summary" nolabel="1"/>
+                  <field name="cargo_summary" nolabel="1"/>
+                </group> 
+          </page>           
+        </notebook>
+      </sheet>
+ <!--        <field name="message_follower_ids"
+            widget="mail_followers" />
+        <field name="message_ids" widget="mail_thread" /> -->
+    </form>
+  </field>
+</record>   
+
+<!-- Job kanban view -->  
+<record id="view_job_kanban" model="ir.ui.view">
+  <field name="name">fwdr.job.kanban</field>
+  <field name="model">fwdr.job</field>           
+  <field name="arch" type="xml">
+    <kanban class="o_kanban_mobile">          
+      <field name="job_number"/>
+      <field name="load_port_id"/>
+      <field name="dsch_port_id"/>
+      <field name="m_dest_port_id"/>
+      <field name="ob_transaction_date"/>
+      <field name="ib_transaction_date"/>
+      <field name="state"/>                
+      <field name="shipment_ids" />
+	  <templates>
+	    <t t-name="kanban-box">
+	      <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+	      	<div class="row">
+              <div class="col-xs-6">
+                <strong><span><t t-esc="record.job_number.value"/></span></strong>
+              </div>    
+              <div class="col-xs-6">
+                <span class="pull-right text-right">
+                  <t t-esc="record.ob_transaction_date.value" class="col-xs-6 text-muted"/>
+                  <field name="state" widget="kanban_label_selection" 
+                    options="{'classes': {'draft': 'default', 
+                                          'open': 'default', 
+                                          'complete': 'default', 
+                                          'cancel': 'default',
+                                          'lock': 'success'}}"/>
+                </span>
+              </div>              
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <span>
+                  <t t-esc="record.load_port_id.value"/>-
+                  <t t-esc="record.dsch_port_id.value"/>-
+                  <t t-esc="record.m_dest_port_id.value"/>
+                </span>
+              </div>                  
+            </div>
+	        <p>
+	      	  <t t-foreach="record.shipment_ids.raw_value" t-as='o'>
+	            <t t-esc="o.shipment_number"/><br/>
+	          </t>
+	        </p>
+	      </div>
+	    </t>
+	  </templates>
+    </kanban>
+  </field>
+</record>
+
+<!-- Job calendar view -->   
+<record id="view_job_calendar" model="ir.ui.view">  
+  <field name="name">fwdr.job.calendar</field>  
+  <field name="model">fwdr.job</field>  
+    <field name="arch" type="xml">  
+    <calendar date_start="etd" quick_add="1" date_stop="etd" 
+         color="job_number" mode="month" >  
+      <field name="job_number" />  
+      <field name="voyage" />              
+    </calendar>  
+  </field>  
+</record>  
+
+<!-- Job Search View --> 
+<record id="job_view_filter" model="ir.ui.view" >
+  <field name="name">fwdr.job.list.select</field>
+  <field name="model">fwdr.job</field>
+  <field name="arch" type="xml">
+    <search>
+      <field name="job_number"/>
+      <field name="shipment_ids"/>
+      <field name="shipment_item_ids" string="House B/L"/>
+      <field name="shipping_party_ids"/>
+      <field name="voyage"/>
+      <field name="load_port_id"/>
+      <field name="dsch_port_id"/>
+      <field name="m_dest_port_id"/>
+      <field name="m_fnd_id"/>
+      <filter string="My Jobs" domain="[('create_uid','=',uid)]" name="my_jobs_filter"/>
+      <!-- <filter string="My Company Jobs" domain="[('ob_office_id','=',current_company)]" name="my_company_jobs_filter"/> -->
+      <separator/>
+      <filter string="Open Jobs" name="open_jobs" domain="[('state','=','open')]"/>
+      <!-- <filter name="filter_create_by" string="Create by Myself"
+          domain="[('create_uid','=','self.env.user')]"/>  -->         
+      <!-- <filter name="filter_not_done" string="Not Done"
+          domain="[(create_by_'is_done','=',False)]"/>
+      <filter name="filter_done" string="Done"
+          domain="[('is_done','!=',False)]"/>
+      <separator/> -->
+<!--           <filter name="group_user" string="By User"
+        context="{'group_by': 'user_id'}"/> -->
+    </search>
+  </field>
+</record> 
+
+<!-- Export Job actions -->  
+<record id="action_ob_job" model="ir.actions.act_window">
+  <field name="name">Export Job</field>
+  <field name="res_model">fwdr.job</field>
+  <field name="type">ir.actions.act_window</field>
+  <field name="view_mode">tree,form,kanban,calendar</field>
+  <field name="domain">[]</field>
+  <field name="context">{
+          'ob': 1,
+          'default_ob_transaction_date':current_date,                         
+          'search_default_my_jobs_filter': 1
+          }
+  </field>                                 
+</record> 
+<!-- <record id="action_job_tree" model="ir.actions.act_window.view">
+  <field name="sequence" eval="1"/>
+  <field name="view_mode">tree</field>
+  <field name="view_id" ref="view_job_tree"/>      
+  <field name="act_window_id" ref="action_ob_job"/>
+</record>
+<record id="action_job_form" model="ir.actions.act_window.view">
+  <field name="sequence" eval="2"/>
+  <field name="view_mode">form</field>
+  <field name="view_id" ref="view_job_form"/>      
+  <field name="act_window_id" ref="action_ob_job"/>
+</record> -->
+
+<!-- Import Job actions -->  
+<record id="action_ib_job" model="ir.actions.act_window">
+  <field name="name">Import Job</field>
+  <field name="res_model">fwdr.job</field>
+  <field name="type">ir.actions.act_window</field>
+  <field name="view_mode">tree,form,kanban,calendar</field>
+  <field name="domain">[('ib_start','=', True)]</field>
+  <field name="context">{
+          'ib': 1,
+          'default_ib_transaction_date':current_date, 
+          'default_ib_start_uid': uid,
+          'default_state': 'ib_start',
+          'search_default_my_jobs_filter': 1
+          }
+  </field>                                 
+</record>
+
+<!-- Incoming Job actions -->  
+<record id="action_incoming_job" model="ir.actions.act_window">
+  <field name="name">Incoming Job</field>
+  <field name="res_model">fwdr.job</field>
+  <field name="type">ir.actions.act_window</field>
+  <field name="view_mode">tree,form,kanban,calendar</field>
+  <field name="domain">[('ib_start_uid','=', False)]</field>
+  <field name="context">{'incoming': 1}</field>                                 
+</record>   
+
+<!-- menu -->    
+<menuitem name="Forwarding" id="menu_fwdr"/>    
+
+<menuitem name="Export" id="menu_ob" parent="menu_fwdr" sequence="1"/>      
+<menuitem name="Job" id="menu_ob_job" parent="menu_ob" action="action_ob_job" sequence="1" />
+
+<menuitem name="Import" id="menu_ib" parent="menu_fwdr"  sequence="2"/>  
+<menuitem name="Incoming Job" id="menu_incoming_job" parent="menu_ib" action="action_incoming_job" sequence="1" /> 
+<menuitem name="Job" id="menu_ib_job" parent="menu_ib" action="action_ib_job" sequence="2" />  
+
+</data>
+</odoo>

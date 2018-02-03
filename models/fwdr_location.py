@@ -35,8 +35,30 @@ class City(models.Model):
     unlocode = fields.Char(size=5)
     active = fields.Boolean()
 
+    @api.multi
+    def name_get(self):
+        res = []
+        for city in self:
+            name = city.name
+            if self._context.get('show_full_name'):
+                if city.state_id:
+                    name += ',' + city.state_id.name
+                name += ',' + city.country_id.name                
+            res.append((city.id, name)) 
+        return res
 
-class FwdrPort(models.Model):
+    @api.model  
+    def name_search(self,name='',args=None,operator='ilike',limit=100):  
+        args = args or []  
+        domain = []  
+        if name:  
+            domain = ['|',
+                ('name',operator,name),
+                ('unlocode',operator,name)]  
+        pos = self.search(domain + args,limit=limit)  
+        return pos.name_get()  
+
+class Port(models.Model):
     _description = "Port"
     _name = 'fwdr.port' 
 
@@ -48,9 +70,34 @@ class FwdrPort(models.Model):
     category = fields.Selection([
         ('air', 'Airport'),
         ('sea', 'Seaport')])
-    active = fields.Boolean()
+    active = fields.Boolean(default=True)
     terminal_ids = fields.One2many('res.partner', 'port_id', string=u"Terminal")
 
+    @api.multi
+    def name_get(self):
+        if not self._context.get('show_full_name'):
+            return super(Port, self).name_get()
+
+        res = []
+        if self._context.get('show_full_name'):
+            for port in self:
+                name = port.name            
+                if port.state_id:
+                    name += ',' + port.state_id.name
+                name += ',' + port.country_id.name
+                res.append((port.id, name)) 
+        return res
+
+    @api.model  
+    def name_search(self,name='',args=None,operator='ilike',limit=100):  
+        args = args or []  
+        domain = []  
+        if name:  
+            domain = ['|',
+                ('name',operator,name),
+                ('code',operator,name)]  
+        pos = self.search(domain + args,limit=limit)  
+        return pos.name_get()  
 
 # class FmsLocation(models.Model):
 #     _name = 'fms.location'

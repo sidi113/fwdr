@@ -1,6 +1,25 @@
 <odoo>
   <data>
 
+    <record id="view_partner_form_inherited" model="ir.ui.view">
+      <field name="name">res.partner.form.inherited</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_partner_form"/>
+      <field name="arch" type="xml">
+        <data>
+          <field name="parent_id" position="after">
+            <div class="o_row">
+              <field name="alias" placeholder="Alias..." attrs="{'invisible':[('company_type','=','person')]}"/>
+            </div>
+          </field>
+          <field name="website" position="before">
+            <field name="print_label"/>
+          </field>
+        </data>
+      </field>
+    </record>
+
+
     <!-- Top menu item -->    
     <menuitem name="Base" id="menu_base"/>    
     

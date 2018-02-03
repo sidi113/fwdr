@@ -1,0 +1,9 @@
+<odoo>  
+    <data>  
+    <template id="assets_backend" name="fwdr assets" inherit_id="web.assets_backend">  
+        <xpath expr="." position="inside">  
+            <link rel="stylesheet" href="/fwdr/static/src/css/main.css"/>  
+        </xpath>  
+    </template>  
+    </data>  
+</odoo>  

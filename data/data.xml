@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+   <data noupdate="True">
+      <record id="job_number" model="ir.sequence">
+         <field name="name">Job ID</field>
+         <field name="code">job.number</field>
+         <field name="padding">0</field>
+         <field name="number_increment">1</field>
+         <field name="number_next_actual">8856</field>
+      </record>
+
+      <record id="shipment_number" model="ir.sequence">
+         <field name="name">Shipment ID</field>
+         <field name="code">shipment.number</field>
+         <field name="padding">0</field>
+         <field name="number_increment">1</field>
+         <field name="number_next_actual">3565</field>
+      </record>
+   </data>
+</odoo>

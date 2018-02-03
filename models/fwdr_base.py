@@ -115,3 +115,55 @@ class FwdrTransitType(models.Model):
     name = fields.Char(string=u'Transit Type', required=True, translate=True)
     seqence = fields.Integer()
     active = fields.Boolean(default=True)
+
+
+class TransitCategory(models.Model):
+    _description = 'Transit Category'
+    _name = 'fwdr.transit.category'
+    _order = 'parent_left, name'
+    _parent_store = True
+    _parent_order = 'name'
+
+    name = fields.Char(string='Transit Category', required=True, translate=True)
+    color = fields.Integer(string='Color Index')
+    parent_id = fields.Many2one('fwdr.transit.category', string='Parent Category', index=True, ondelete='cascade')
+    child_ids = fields.One2many('fwdr.transit.category', 'parent_id', string='Child Category')
+    active = fields.Boolean(default=True, help="The active field allows you to hide the transit category without removing it.")
+    parent_left = fields.Integer(string='Left parent', index=True)
+    parent_right = fields.Integer(string='Right parent', index=True)
+
+    @api.constrains('parent_id')
+    def _check_parent_id(self):
+        if not self._check_recursion():
+            raise ValidationError(_('Error ! You can not create recursive type.'))
+
+    @api.multi
+    def name_get(self):
+        """ Return the type' display name, including their direct
+            parent by default.
+
+            If ``context['partner_ctype_display']`` is ``'short'``, the short
+            version of the category name (without the direct parent) is used.
+            The default is the long version.
+        """
+        if self._context.get('transit_category_display') == 'short':
+            return super(TransitCategory, self).name_get()
+
+        res = []
+        for transit_category in self:
+            names = []
+            current = transit_category
+            while current:
+                names.append(current.name)
+                current = current.parent_id
+            res.append((transit_category.id, ' / '.join(reversed(names))))
+        return res
+
+    @api.model
+    def name_search(self, name, args=None, operator='ilike', limit=100):
+        args = args or []
+        if name:
+            # Be sure name_search is symetric to name_get
+            name = name.split(' / ')[-1]
+            args = [('name', operator, name)] + args
+        return self.search(args, limit=limit).name_get()

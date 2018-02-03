@@ -1,7 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="0">
-        
+
+        <!-- Resource: fwdr.role.type -->
+        <record id="res_partner_category_0" model="res.partner.category">
+            <field name="name">Booking Party</field>
+            <field name="seqence">1</field>
+            <field name="color" eval="1"/>
+            <field name="shipment_role">1</field>
+        </record>        
+        <record id="res_partner_category_1" model="res.partner.category">
+            <field name="name">Shipper</field>
+            <field name="seqence">2</field>
+            <field name="color" eval="2"/>
+            <field name="shipment_role">1</field>
+        </record>        
+        <record id="res_partner_category_2" model="res.partner.category">
+            <field name="name">Consignee</field>
+            <field name="seqence">3</field>
+            <field name="color" eval="3"/>
+            <field name="shipment_role">1</field>
+        </record>         
+        <record id="res_partner_category_3" model="res.partner.category">
+            <field name="name">Notify</field>
+            <field name="seqence">4</field>
+            <field name="color" eval="4"/>
+            <field name="shipment_role">1</field>
+        </record>         
+        <record id="res_partner_category_5" model="res.partner.category">
+            <field name="name">Billing Party</field>
+            <field name="seqence">6</field>
+            <field name="color" eval="6"/>
+            <field name="shipment_role">1</field>
+        </record>         
+        <record id="res_partner_category_6" model="res.partner.category">
+            <field name="name">Forwarder</field>            
+            <field name="color" eval="7"/>
+        </record>         
+        <record id="res_partner_category_7" model="res.partner.category">
+            <field name="name">Factory</field>            
+            <field name="color" eval="8"/>
+        </record>         
+        <record id="res_partner_category_8" model="res.partner.category">
+            <field name="name">Truck</field>            
+            <field name="color" eval="9"/>
+        </record>
+        <record id="res_partner_category_9" model="res.partner.category">
+            <field name="name">Agent</field>            
+            <field name="color" eval="10"/>
+        </record>                         
+        <record id="res_partner_category_10" model="res.partner.category">
+            <field name="name">Vendor</field>            
+            <field name="color" eval="11"/>
+        </record> 
+        <record id="res_partner_category_11" model="res.partner.category">
+            <field name="name">Shipping Line</field>            
+            <field name="color" eval="12"/>
+        </record>                
+        <record id="res_partner_category_12" model="res.partner.category">
+            <field name="name">Air Line</field>            
+            <field name="color" eval="12"/>
+        </record> 
+
+
+
         <!-- Resource: fwdr.transit.type -->
         <record id="transit_type_1" model="fwdr.transit.type">
             <field name="name">Ocean</field>

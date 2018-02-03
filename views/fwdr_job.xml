@@ -5,21 +5,23 @@
       <field name="name">Job</field>
       <field name="model">fwdr.job</field>
       <field name="arch" type="xml">
-        <tree delete="false">
+        <tree delete="false" decoration-muted="state=='cancel'">
           <field name="job_number"/>          
           <field name="shipment_ids" widget="one2many"/>          
           <field name="ob_transaction_date"/>
           <!-- <field name="ob_billing_date"/> -->
           <field name="transit_type_id"/>
           <!-- <field name="traffic_mode"/> -->
-          <field name="m_load_port_id"/>
-          <field name="m_dsch_port_id"/>
+          <field name="load_port_id"/>
+          <field name="dsch_port_id"/>
           <field name="m_dest_port_id"/>
           <field name="m_fnd_id"/>
-          <field name="m_voyage"/>
-          <field name="m_etd"/>
+          <field name="voyage"/>
+          <field name="etd"/>
           <!-- <field name="service_contract"/> -->
           <field name="ob_office_id"/>
+          <field name="ib_office_id"/>
+          <field name="state"/>
         </tree>
       </field>
     </record> 
@@ -27,17 +29,16 @@
     <!-- form view: Export Job -->  
     <record model="ir.ui.view" id="ob_job_form">
       <field name="name">Job</field>
-      <field name="model">fwdr.job</field>
-      <field name="domain">[]</field>
-      <field name="context">{'default_ob_transaction_date':fields.Date.today(),
-                            'default_ob_office_id':self.env.user.company_id}</field>
+      <field name="model">fwdr.job</field>           
       <field name="arch" type="xml">
         <form string="Export Job" delete="false">
           <header>            
             <button name="action_create_shipment" string="Create Shipment" 
-              type="object" class="btn-primary"  states="open" />
-            <!-- <button string="Terminate" type="action"/> -->
-            <button string="Cancel" type="action" states="open"/>
+              type="object" class="btn-primary"  states="open,compelte" />            
+            <button name="action_complete" states="open" type="object" string="Compelte"/>
+            <button name="action_lock" states="open,compelte" type="object" string="Lock"/>
+            <button name="action_cancel" states="open" type="object" string="Cancel"/>
+            <button name="action_reactive" states="cancel" type="object" string="Reactive"/>
             <!-- <button name="action_ba_send" string="Send BA" type="object" states="ba,confirm" class="btn-primary"/> -->
             <!-- <button name="print_ba" string="Print" type="object" states="ba,confirm" class="btn-primary"/> -->
             <!-- <button name="action_cancel" states="open,ba,confirm" type="object" string="Cancel"/> -->
@@ -74,78 +75,94 @@
           </div> 
           <notebook>
             <page string="Main" name="main">
-              <group name="group_top"> 
-                <group name="group_left">                                  
-                  <field name="transit_type_id"/>
-                  <!-- domain="[('display_name', 'ilike', 'Oce')]"  -->
-                  <field name="ob_transaction_date" context="{'default_ob_transaction_date':fields.Date.today()}" />
-                  <field name="ob_billing_date" />
-                </group> 
-                <group name="group_right"> 
-                  <field name="ob_office_id"/>
-                  <field name="ib_office_id"/>                  
-                </group> 
-              </group>
+             	<div class="col-xs-4">
+             		<field name="mbl_ids"  nolabel="1">
+	                    <tree editable="bottom">
+	                      <field name="bl_type"/>
+	                      <field name="mbl_number"/>
+	                      <field name="piece_count"/>                      
+	                    </tree>                 
+	                  </field>
+	                  <field name="container_ids" nolabel="1">
+	                    <tree editable="bottom">
+	                      <field name="type_id"/>
+	                      <field name="container_number" string="Container#" />                      
+	                      <field name="seal_number" string="Seal#" />
+	                    </tree>                  
+	                  </field>
+	                  <separator/>
+	                  <field name="container_units" class="oe_subtotal_footer_separator"/>
+	                  <field name="container_teus" class="oe_subtotal_footer_separator"/>
+              		
+              	</div>
+              	<div class="col-xs-8">
+              	
+              		<group>
+	                <group name="group_left">                                  
+	                  <field name="transit_type_id" domain="[('name', '=', 'Ocean')]"/>
+	                  <!-- domain="[('display_name', 'ilike', 'Oce')]"  -->
+	                  <field name="ob_transaction_date" />
+	                  <field name="ob_billing_date" />
+	                </group> 
+	                <group name="group_right"> 
+	                  <field name="ob_office_id" readonly="1" />
+	                  <field name="ib_office_id"/>                  
+	                </group> 
+	            	</group>
+	              <separator string="Route" />  
+	                        
+	              <group name="group_route_top"> 
+	                <group name="group_route_left">                    
+	                  <field name="voyage" />
+	                  <field name="load_port_id"/>
+	                  <field name="dsch_port_id"/>
+	                  <field name="m_dest_port_id"/> 
+	                  <field name="m_fnd_id" />                                            
+	                </group> 
+	                <group name="group_route_right">   
+	                  <field name="cutoff"/>                                      
+	                  <field name="etd" />                    
+	                  <field name="m_eta1" />
+	                  <field name="m_eta2" />
+	                  <field name="pol_location_id"/>   
+	                  <field name="pol_contact"/>
+	                  <field name="m_pod_location_id"/>   
+	                  <field name="m_pod_contact"/>
+	                </group> 
+	            	
+	              </group>
+	              <!-- <field name="shipment_ids" nolabel="1" mode="kanban" >
+	              <kanban>
+	                    <field name="shipment_number"/>   
 
-              <separator string="Route" />                
-              <group name="group_route_top"> 
-                <group name="group_route_left">  
-                  <field name="m_voyage"/>
-                  <field name="m_load_port_id"/>
-                  <field name="m_dsch_port_id"/>
-                  <field name="m_dest_port_id"/> 
-                  <field name="m_fnd_id" />                                            
-                </group> 
-                <group name="group_route_right">   
-                  <field name="m_cutoff"/>                                      
-                  <field name="m_etd" />                    
-                  <field name="m_eta1" />
-                  <field name="m_eta2" />
-                  <field name="m_pol_location_id"/>   
-                  <field name="m_pol_contact"/>
-                  <field name="m_pod_location_id"/>   
-                  <field name="m_pod_contact"/>
-                </group> 
-              </group>
- <!--              <separator string="Customs" />
-              <group>
-                <group>
-                  <field name="it_number" />                  
-                </group>
-                <group>
-                  <field name="it_place" />
-                </group>
-              </group> -->
-              <group>            
-                <group string="MBL/AMS">                           
-                  <field name="mbl_ids"  nolabel="1">
-                    <tree editable="bottom">
-                      <field name="bl_type"/>
-                      <field name="mbl_number"/>
-                      <field name="piece_count"/>                      
-                    </tree>                 
-                  </field>
-                </group>
-                <group string="Container" >                           
-                  <field name="container_ids" nolabel="1">
-                    <tree editable="bottom">
-                      <field name="type_id"/>
-                      <field name="container_number" string="Container#" />                      
-                      <field name="seal_number" string="Seal#" />
-                    </tree>                  
-                  </field>
-                </group>
-              </group>
-              <separator string="Shipment" />
-              <field name="shipment_ids">
-                <tree>
-                  <field name="shipment_number" string="Shipment ID"/>
-                  <field name="booking_party_id"/>
-                  <field name="s_shipper_id"/>
-                  <field name="s_consignee_id"/>
-                  <field name="h_dest_port_id"/> 
-                </tree>
-              </field>              
+	                    <templates>                                    	
+	                        <t t-name="kanban-box" >                        	
+	                            <div t-attf-class=" oe_kanban_global_click" >
+	                            	<div class="panel panel-default">
+	                            		<div class="panel-body ">
+	                                <span ><t t-esc="record.shipment_number.value"/></span>
+	                            </div>
+	                        </div>
+	                            </div>	                            
+	                        </t>
+	                    </templates>
+	                </kanban>
+	            </field> -->
+	            <field name="shipment_ids" />
+
+		    <templates>
+		        <t t-name="kanban-box">
+		            <div >
+		                <p>
+		                   <t t-foreach="record.shipment_ids.raw_value" t-as='o'>
+		                       <t t-esc="o.shipment_number"/><br/>
+		                   </t>
+		                </p>
+		            </div>
+		        </t>
+		    </templates>
+	        
+	    </div>
             </page>             
             <!-- <page string="Freighting">                           
               
@@ -158,14 +175,83 @@
       </field>
     </record>   
 
+    <!-- kanban view: Export Job -->  
+    <record model="ir.ui.view" id="ob_job_kanban">
+      <field name="name">Job</field>
+      <field name="model">fwdr.job</field>           
+      <field name="arch" type="xml">
+        <kanban class="o_kanban_mobile">          
+          <field name="job_number"/> 
+          <field name="shipment_ids" />
+
+		    <templates>
+		        <t t-name="kanban-box">
+		            <div >
+		                <p>
+		                   <t t-foreach="record.shipment_ids.raw_value" t-as='o'>
+		                       <t t-esc="o.shipment_number"/><br/>
+		                   </t>
+		                </p>
+		            </div>
+		        </t>
+		    </templates>
+
+          <!-- <field name="load_port_id"/>
+          <field name="dsch_port_id"/>
+          <field name="m_dest_port_id"/>
+          <field name="ob_transaction_date"/>
+          <field name="state"/>           -->
+          <!-- <templates>
+            <t t-name="kanban-box">
+              <div t-attf-class="oe_kanban_card oe_kanban_global_click"> -->
+               <!--  <div class="row">
+                  <div class="col-xs-6">
+                    <strong><span><t t-esc="record.job_number.value"/></span></strong>
+                  </div>    
+                  <div class="col-xs-6">
+                    <span class="pull-right text-right">
+                      <t t-esc="record.ob_transaction_date.value" class="col-xs-6 text-muted"/>
+                      <field name="state" widget="kanban_label_selection" 
+                        options="{'classes': {'draft': 'default', 
+                                              'draft': 'default', 
+                                              'cancel': 'default',
+                                              'lock': 'success'}}"/>
+                    </span>
+                  </div>              
+                </div> -->
+
+                <!-- <div class="row">
+                  	
+		                <p>
+		                   <t t-foreach="record.shipment_ids.raw_value" t-as='o'>
+		                       <t t-esc="o.shipment_number"/><br/>
+		                   </t>
+		                </p>
+		            
+                  <div class="col-xs-6">
+                  </div>
+                </div> -->
+                <!-- <div class="row">
+                  <div class="col-xs-12">
+                    <span><t t-esc="record.load_port_id.value"/>-
+                    		<t t-esc="record.dsch_port_id.value"/>-
+                    		<t t-esc="record.m_dest_port_id.value"/></span>
+                  </div>                  
+                </div> -->
+              <!-- div>
+            </t>
+          </templates> -->
+        </kanban>
+      </field>
+    </record>
  
     <record model="ir.ui.view" id="job_calendar">  
       <field name="model">fwdr.job</field>  
         <field name="arch" type="xml">  
-        <calendar date_start="m_etd" quick_add="1" date_stop="m_etd" 
+        <calendar date_start="etd" quick_add="1" date_stop="etd" 
              color="job_number" mode="month" >  
             <field name="job_number" />  
-            <field name="m_voyage" />              
+            <field name="voyage" />              
         </calendar>  
       </field>  
     </record>  
@@ -175,9 +261,14 @@
       <field name="name">Job</field>
       <field name="res_model">fwdr.job</field>
       <field name="type">ir.actions.act_window</field>
-      <field name="view_mode">tree,form,calendar</field>
+      <field name="view_mode">tree,form,kanban,calendar</field>
       <field name="domain">[]</field>
-      <field name="context">{}</field>
+      <field name="context">{
+              'ob': 1,
+              'default_ob_transaction_date':current_date,                            
+              'search_default_my_jobs_filter': 1
+              }
+      </field>                                 
     </record>   
 
     <record model="ir.actions.act_window.view" id="ob_job_actiom_tree">
@@ -195,175 +286,22 @@
     </record>
 
 
-    <!-- tree view: Import Job -->    
-    <record model="ir.ui.view" id="ib_job_tree">
-      <field name="name">Import Job</field>
-      <field name="model">fwdr.ib.job</field>
-      <field name="arch" type="xml">
-        <tree delete="false">
-          <field name="job_number"/>          
-          <field name="ib_transaction_date"/>
-          <field name="ib_billing_date"/>
-          <field name="transit_type_id"/>
-          <field name="traffic_mode"/>
-          <field name="m_load_port_id"/>
-          <field name="m_dsch_port_id"/>
-          <field name="m_dest_port_id"/>
-          <field name="m_fnd_id"/>
-          <field name="m_voyage"/>
-          <field name="m_eta1"/>          
-          <field name="ib_office_id"/>
-        </tree>
-      </field>
-    </record> 
-
-    <!-- form view: Import Job -->  
-    <record model="ir.ui.view" id="ib_job_form">
-      <field name="name">Import Job</field>
-      <field name="model">fwdr.ib.job</field>
-      <field name="domain">[]</field>
-      <field name="context">{}</field>
-      <field name="arch" type="xml">
-        <form string="Import Job" delete="false">
-          <header>            
-            <!-- <button string="Create Shipment" type="action" class="btn-primary" /> -->
-            <button string="Terminate" type="action"/>
-            <button string="Cancel" type="action"/>
-            <!-- <button name="action_ba_send" string="Send BA" type="object" states="ba,confirm" class="btn-primary"/>
-            <button name="print_ba" string="Print" type="object" states="ba,confirm" class="btn-primary"/>
-            <button name="action_cancel" states="open,ba,confirm" type="object" string="Cancel"/>
-            <button name="action_open" states="cancel" type="object" string="Open"/>
-            <button name="action_done" type="object" string="Locked" states="sa,confirm,load"
-                help="If the sale is locked, you can not modify it anymore. However, you will still be able to invoice or deliver."/>
-            <field name="state" widget="statusbar" statusbar_visible="open,confirm,load,done"/> -->
-          </header>
-
-
-          <div class="oe_title"> 
-            <h1> <label for="job_number" string="Job ID"/> 
-              <field name="job_number" class="oe_inline"/></h1>                
-          </div> 
-          <notebook>
-            <page string="Main" name="main">
-              <group name="group_top"> 
-                <group name="group_left">                                  
-                  <field name="transit_type_id"/>
-                  <!-- domain="[('display_name', 'ilike', 'Oce')]"  -->
-                  <field name="ib_transaction_date" />
-                  <field name="ib_billing_date" />
-                </group> 
-                <group name="group_right"> 
-                  <field name="ob_office_id"/>
-                  <field name="ib_office_id"/>
-                </group> 
-              </group>
-
-              <separator string="Route" />                
-              <group name="group_route_top"> 
-                <group name="group_route_left">  
-                  <field name="m_voyage"/>
-                  <field name="m_load_port_id"/>
-                  <field name="m_dsch_port_id"/>
-                  <field name="m_dest_port_id"/> 
-                  <field name="m_fnd_id" />                                            
-                </group> 
-                <group name="group_route_right">   
-                  <field name="m_cutoff"/>                                      
-                  <field name="m_etd" />                    
-                  <field name="m_eta1" />
-                  <field name="m_eta2" />
-                  <field name="m_pol_location_id"/>   
-                  <field name="m_pol_contact"/>
-                  <field name="m_pod_location_id"/>   
-                  <field name="m_pod_contact"/>
-                </group> 
-              </group>
-              <separator string="Customs" />
-              <group>
-                <group>
-                  <field name="m_it_number" />
-                  <field name="m_it_place" />
-                  <field name="m_it_date" />
-                </group>
-                <group>
-                  <field name="m_custom_entry_number" />
-                  <field name="m_custom_entry_date" />
-                </group>
-              </group>
-              <group>            
-                <group string="MBL/AMS">                           
-                  <field name="mbl_ids"  nolabel="1">
-                    <tree editable="bottom">
-                      <field name="bl_type"/>
-                      <field name="mbl_number"/>
-                      <field name="piece_count"/>                      
-                    </tree>                 
-                  </field>
-                </group>
-                <group string="Container" >                           
-                  <field name="container_ids" nolabel="1">
-                    <tree editable="bottom">
-                      <field name="type_id"/>
-                      <field name="container_number" string="Container#" />                      
-                      <field name="seal_number" string="Seal#" />
-                    </tree>                  
-                  </field>
-                </group>
-              </group>
-              <field name="shipment_ids">
-                <tree>
-                  <field name="shipment_number" string="Shipment ID"/>
-                  <field name="booking_party_id"/>
-                  <field name="s_shipper_id"/>
-                  <field name="s_consignee_id"/>
-                  <field name="h_dest_port_id"/> 
-                </tree>
-              </field>  
-            </page>             
-            <!-- <page string="Freighting">                           
-              
-            </page> -->
-          </notebook>
-        </form>
-      </field>
-    </record>   
-
-
-    <!-- actions opening views: Export Job -->  
-    <record model="ir.actions.act_window" id="ib_job_action">
-      <field name="name">Import Job</field>
-      <field name="res_model">fwdr.ib.job</field>
-      <field name="type">ir.actions.act_window</field>
-      <field name="view_mode">tree,form</field>
-      <field name="domain">[]</field>
-      <field name="context">{}</field>
-    </record>   
-
-    <record model="ir.actions.act_window.view" id="ib_job_actiom_tree">
-      <field name="sequence" eval="1"/>
-      <field name="view_mode">tree</field>
-      <field name="view_id" ref="ib_job_tree"/>      
-      <field name="act_window_id" ref="ib_job_action"/>
-    </record>
-
-    <record model="ir.actions.act_window.view" id="ib_job_actiom_form">
-      <field name="sequence" eval="2"/>
-      <field name="view_mode">form</field>
-      <field name="view_id" ref="ib_job_form"/>      
-      <field name="act_window_id" ref="ib_job_action"/>
-    </record>
-
     <!-- Search View: Job --> 
     <record model="ir.ui.view" id="job_view_filter" >
+      <field name="name">fwdr.job.list.select</field>
       <field name="model">fwdr.job</field>
       <field name="arch" type="xml">
         <search>
           <field name="job_number"/>
           <field name="shipment_ids"/>
-          <field name="m_load_port_id"/>
-          <field name="m_dsch_port_id"/>
+          <field name="load_port_id"/>
+          <field name="dsch_port_id"/>
           <field name="m_dest_port_id"/>
           <field name="m_fnd_id"/>
+          <filter string="My Jobs" domain="[('create_uid','=',uid)]" name="my_jobs_filter"/>
+          <!-- <filter string="My Company Jobs" domain="[('ob_office_id','=',current_company)]" name="my_company_jobs_filter"/> -->
+          <separator/>
+          <filter string="Open Jobs" name="open_jobs" domain="[('state','=','open')]"/>
           <!-- <filter name="filter_create_by" string="Create by Myself"
               domain="[('create_uid','=','self.env.user')]"/>  -->         
           <!-- <filter name="filter_not_done" string="Not Done"
@@ -382,10 +320,6 @@
 
     <menuitem name="Export" id="menu_ob" parent="menu_fwdr" sequence="1"/>      
     <menuitem name="Job" id="menu_ob_job" parent="menu_ob" action="ob_job_action" sequence="1" /> 
-
-    <menuitem name="Import" id="menu_ib" parent="menu_fwdr" action="ib_job_action" sequence="2"/>  
-    <menuitem name="Imcoming Job" id="menu_incoming_job" parent="menu_ib" action="ib_job_action" sequence="1" /> 
-    <menuitem name="Job" id="menu_ib_job" parent="menu_ib" action="ib_job_action" sequence="2" /> 
 
   </data>
 </odoo>

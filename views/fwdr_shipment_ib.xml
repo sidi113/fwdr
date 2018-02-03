@@ -1,11 +1,11 @@
 <odoo>
   <data>
     <!-- tree view: Shipment -->    
-    <record model="ir.ui.view" id="shipment_tree">
+    <record model="ir.ui.view" id="ib_shipment_tree">
       <field name="name">Shipment</field>
       <field name="model">fwdr.shipment</field>
       <field name="arch" type="xml">
-        <tree string="Shipment" delete="false"  copy="false" 
+        <tree string="Shipment" delete="false" create="false" copy="false" 
               decoration-muted="state=='cancel'">
           <field name="shipment_number" string="Shipment"/>
           <field name="job_number" string="Job"/>
@@ -20,27 +20,27 @@
     </record>
   
     <!-- form view: Export Shipment -->    
-<!--     <record model="ir.ui.view" id="shipment_form">
+    <record model="ir.ui.view" id="ib_shipment_form">
       <field name="name">Shipment</field>
       <field name="model">fwdr.shipment</field>
       <field name="domain">[]</field>
       <field name="context">{}</field>
       <field name="arch" type="xml">
         <form string="Shipment" delete="false" create="false" copy="false">
-          <header>       -->      
+          <header>            
             <!-- <button string="Create House B/L" type="action" class="btn-primary">       -->
               <!-- <field name='state' attrs="{'invisible': [('state', '=', 'open')]}"/> -->
             <!-- </button> -->
                                 <!--  statusbar_visible="open,compelte,lock"            -->
-       <!--      <field name="state" widget="statusbar" statusbar_visible="open,compelte,lock"/>              
+            <field name="state" widget="statusbar" statusbar_visible="open,compelte,lock"/>              
           </header>          
           <div class="oe_button_box" name="button_box">
             <button name="action_view_hbl"
                 type="object"
                 class="oe_stat_button"
-                icon="fa-pencil-square-o"> -->
+                icon="fa-pencil-square-o">
                 <!-- attrs="{'invisible': [('invoice_count', '=', 0)]}"> -->
-               <!--  <field name="hbl_count" widget="statinfo" string="HBLs"/>
+                <field name="hbl_count" widget="statinfo" string="HBLs"/>
             </button>
             <button name="action_view_mbl"
                 type="object"
@@ -52,9 +52,9 @@
             <button name="action_view_invoice"
                 type="object"
                 class="oe_stat_button"
-                icon="fa-pencil-square-o"> -->
+                icon="fa-pencil-square-o">
                 <!-- attrs="{'invisible': [('invoice_count', '=', 0)]}"> -->
-              <!--   <field name="invoice_count" widget="statinfo" string="Invoices"/>
+                <field name="invoice_count" widget="statinfo" string="Invoices"/>
             </button>
           </div>
           <div class="oe_title"> 
@@ -65,8 +65,7 @@
             <page string="Main" name="main">
               <group name="group_top"> 
                 <group name="group_left"> 
-                  <field name="job_id"/>  
-                  <field name="state" widget="statusbar" statusbar_visible="open,compelte,lock"/>                                 
+                  <field name="job_id"/>                                               
                   <field name="transit_type_id" />
                 </group> 
                 <group name="group_right"> 
@@ -87,41 +86,54 @@
                 </group> 
               </group>
               <separator string="Route" />                
-                <group name="group_route_top"> 
-                  <group name="group_route_left">                     
-                    <field name="voyage"/>                           
-                    <field name="h_por_id"/>
-                    <field name="load_port_id"/>
-                    <field name="dsch_port_id"/>
-                    <field name="h_dest_port_id"/> 
-                    <field name="h_fnd_id" />                                            
-                  </group> 
-                  <group name="group_route_right">   
-                    <field name="cutoff" string="Cutoff"/>                                      
-                    <field name="etd"  string="POL ETD"/>                    
-                    <field name="h_eta1" string="POD ETA"/>
-                    <field name="h_eta2" string="FND ETA"/>
-                    <field name="pol_location_id"/>   
-                    <field name="h_pod_location_id"/>   
-                    <field name="h_pod_contact"/>
-                  </group> 
-                </group>              
+              <group name="group_route_top"> 
+                <group name="group_route_left">                     
+                  <field name="voyage"/>                           
+                  <field name="h_por_id"/>
+                  <field name="load_port_id"/>
+                  <field name="dsch_port_id"/>
+                  <field name="h_dest_port_id"/> 
+                  <field name="h_fnd_id" />                                            
+                </group> 
+                <group name="group_route_right">   
+                  <field name="cutoff" string="Cutoff"/>                                      
+                  <field name="etd"  string="POL ETD"/>                    
+                  <field name="h_eta1" string="POD ETA"/>
+                  <field name="h_eta2" string="FND ETA"/>
+                  <field name="pol_location_id"/>   
+                  <field name="h_pod_location_id"/>   
+                  <field name="h_pod_contact"/>
+                </group> 
+              </group> 
+              <separator string="Customs" />                
+              <group name="group_route_top"> 
+                <group name="group_route_left">                     
+                  <field name="customs_entry_number"/>                           
+                  <field name="customs_entry_date"/>
+                  <field name="customs_state_id"/>
+                  <field name="customs_state_date"/>                  
+                </group> 
+                <group name="group_route_right">   
+                  <field name="it_place"/>                                      
+                  <field name="it_number" />                    
+                  <field name="it_date"/>                  
+                </group> 
+              </group>               
               <notebook> 
                 <page string="Shipment Item">
                   <field name="hbl_ids">
                     <tree>
                       <field name="hbl_number" string="HB/L Number"/>
-                      <field name="h_shipper_id" string="Shipper"/> -->
-                      <!-- <field name="h_consignee_id" string="Consignee"/> -->
-                      <!-- <field name="hbl_quantity" string="Package"/>
+                      <field name="h_shipper_id" string="Shipper"/>                      
+                      <field name="hbl_quantity" string="Package"/>
                       <field name="brief_description" string="Description"/>
                       <field name="hbl_gross_wt" string="Gross Weight"/>
                       <field name="hbl_volume" string="Volume"/>
                     </tree>
                   </field>
                 </page>
-                <page string="Door Pickup">
-                </page>
+                <!-- <page string="Door Pickup">
+                </page> -->
                 <page string="Door Delivery">
                 </page>
                 <page string="Shipment Note">
@@ -143,10 +155,10 @@
           </notebook>
         </form>
       </field>
-    </record> -->
+    </record>
 
     <!-- actions: Export Shipment -->    
-    <record model="ir.actions.act_window" id="shipment_action">
+    <record model="ir.actions.act_window" id="ib_shipment_action">
       <field name="name">Shipment</field>
       <field name="res_model">fwdr.shipment</field>  
       <field name="type">ir.actions.act_window</field>
@@ -154,26 +166,27 @@
       <field name="view_mode">tree,form</field>
     </record>
       
-<!--     <record model="ir.actions.act_window.view" id="shipment_actiom_tree">
+    <record model="ir.actions.act_window.view" id="ib_shipment_actiom_tree">
       <field name="sequence" eval="1"/>
       <field name="view_mode">tree</field>
-      <field name="view_id" ref="shipment_tree"/>      
-      <field name="act_window_id" ref="shipment_action"/>
+      <field name="view_id" ref="ib_shipment_tree"/>      
+      <field name="act_window_id" ref="ib_shipment_action"/>
     </record>
 
-    <record model="ir.actions.act_window.view" id="shipment_actiom_form">
+    <record model="ir.actions.act_window.view" id="ib_shipment_actiom_form">
       <field name="sequence" eval="2"/>
       <field name="view_mode">form</field>
-      <field name="view_id" ref="shipment_form"/>      
-      <field name="act_window_id" ref="shipment_action"/>
-    </record> -->
+      <field name="view_id" ref="ib_shipment_form"/>      
+      <field name="act_window_id" ref="ib_shipment_action"/>
+    </record>
 
     <!-- menu -->    
-    <menuitem name="Forwarding" id="menu_fwdr"/>    
-
-    <menuitem name="Export" id="menu_ob" parent="menu_fwdr" sequence="1"/>      
-    <menuitem name="Shipment" id="menu_ob_shipment" parent="menu_ob" action="shipment_action" sequence="2" /> 
+    <menuitem name="Forwarding" id="menu_fwdr"/>        
     
+    <menuitem name="Import" id="menu_ib" parent="menu_fwdr" sequence="2"/>      
+    <menuitem name="Shipment" id="menu_ib_shipment" parent="menu_ib" action="ib_shipment_action" sequence="3" /> 
+
+
     
   </data>
 </odoo>

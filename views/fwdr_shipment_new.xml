@@ -1,0 +1,378 @@
+<odoo>
+<data>
+
+<!-- Shipment tree view -->    
+<record id="view_shipment_tree" model="ir.ui.view">
+  <field name="name">fwdr.shipment.tree</field>
+  <field name="model">fwdr.shipment</field>
+  <field name="arch" type="xml">
+    <tree string="Shipment" delete="false" copy="false" 
+          decoration-muted="state=='cancel'">
+      <field name="job_number"/>
+      <field name="shipment_number"/>
+      <field name="booking_party_id"/>
+      <field name="s_shipper_id"/>
+      <field name="consignee_id"/>
+      <field name="load_port_id" />
+      <field name="h_dest_port_id"/>
+      <field name="state" />
+    </tree>
+  </field>
+</record>
+
+<!-- Shipment form view -->    
+<record id="view_shipment_form" model="ir.ui.view">
+  <field name="name">fwdr.shipment.form</field>
+  <field name="model">fwdr.shipment</field>
+  <field name="arch" type="xml">
+    <form string="Shipment" delete="false" create="false" copy="false">
+      <header>            
+        <!-- <button string="Create House B/L" type="action" class="btn-primary"/>       -->
+        <!-- <field name="state" widget="statusbar" statusbar_visible="open,compelte,lock"/>               -->
+      </header> 
+      <sheet>         
+        <div class="oe_button_box" name="button_box">
+          <button name="action_view_hbl"
+              type="object"
+              class="oe_stat_button"
+              icon="fa-pencil-square-o">
+              <!-- attrs="{'invisible': [('shmt_hbl_count', '=', 0)]}"> -->
+              <field name="hbl_count" widget="statinfo" string="HBLs"/>
+          </button>
+          <button name="action_view_invoice"
+              type="object"
+              class="oe_stat_button"
+              icon="fa-pencil-square-o">
+              <!-- attrs="{'invisible': [('invoice_count', '=', 0)]}"> -->
+              <field name="invoice_count" widget="statinfo" string="Invoices"/>
+          </button>
+        </div>
+        <div class="oe_title">         
+          <!-- <label for="shipment_number" editonly="1"/>  -->
+          <h2><field name="shipment_number"/></h2>
+        </div> 
+        <notebook>
+          <page string="Overview" name="overview">
+            <!-- <group > -->
+              <!-- <group >  -->
+                <!-- <field name="job_id" invisible="1"/> -->
+                <!-- <field name="transit_type_id" readonly="1"/> -->
+              <!-- </group> -->
+              <!-- <group >              -->
+                <!-- <field name="ob_office_id" readonly="1"/> -->
+                <!-- <field name="ib_office_id" readonly="1"/> -->
+                <!-- <field name="sales_id"/>  -->
+              <!-- </group> -->
+            <!-- </group>         -->
+            <!-- <hr style="height:1px; color:gray; width:100%" />   -->
+            <!-- <separator string="Shipping Party"/> -->
+<!--             <field name="shipping_party_ids" mode="kanban" context="{'shipment_role': 1}">
+              <tree>
+                <field name="role" />
+                <field name="partner_id"/>
+                <field name="name"/>
+                <field name="address"/>
+                <field name="contact"/>
+              </tree>
+              <kanban  default_order="role,name desc">
+                <field name="role" context="{'shipment_role': 1}"/>
+                <field name="partner_id"/>
+                <field name="name"/>
+                <field name="address"/>
+                <field name="contact"/>
+                <templates>                                     
+                  <t t-name="kanban-box" >                          
+                    <div t-attf-class="oe_kanban_card oe_kanban_global_click" >
+                      <strong><span><t t-esc="record.role.value"/></span></strong><br/>
+                      <span ><t t-esc="record.name.value"/></span><br/>
+                      <span ><t t-esc="record.address.value"/></span> <br/>
+                      <span ><t t-esc="record.contact.value"/></span>              
+                    </div>                              
+                  </t>
+                </templates>
+              </kanban>
+              <form>
+                <field name="role" context="{'shipment_role': 1}"/>
+                <field name="partner_id"/>
+                <field name="contact"/>
+                <field name="address"/>
+                <field name="name" invisible="1"/>
+              </form>
+            </field>  -->
+            
+            <group col="4">
+              <group >    
+                <div> 
+                  <div><strong>Booking Party</strong></div>              
+                  <field name="booking_party_id" context="{'search_default_customer':1, 'show_address': 1}" options='{"always_reload": True}'/>
+                </div>
+              </group>              
+              <group >                
+                <!-- <label for="consignee_id"/> -->
+                <div >
+                  <div><strong>Consignee</strong></div> 
+                  <div>
+                    <field name="consignee_id"/>
+                  </div>
+                  <field name="consignee_label" />
+                </div>
+              </group>
+              <group>
+                <!-- <label for="notify_id"/> -->
+                <div>
+                  <div><strong>Notify</strong></div> 
+                  <div>
+                    <field name="notify_id"/>
+                  </div>
+                  <field name="notify_label"/>
+                </div>                  
+              </group> 
+              <group>
+                <!-- <label for="ib_office_id" string="Agent"/> -->
+                <div>
+                  <div><strong>Destination Agent</strong></div> 
+                  <div>
+                    <field name="ib_office_id" readonly="1"/>
+                  </div>
+                  <field name="agent_label"/>
+                </div>                               
+              </group> 
+            </group>
+            <group name="group_route_top" string="Route" > 
+              <group name="group_route_left" >                                              
+                <label for="load_port_id" string="Load Port" readonly="1"/>
+                <div>
+                  <field name="load_port_id"  readonly="1" context="{'show_full_name': 1}" options='{"always_reload": True}'/>
+                  <field name="pol_location_id"  readonly="1"/> 
+                </div> 
+                <field name="dsch_port_id"  readonly="1"/>  
+                <label for="h_dest_port_id" string="Destination Port" context="{'show_full_name': 1}" options='{"always_reload": True}'/>
+                <div>
+                  <field name="h_dest_port_id" context="{'show_full_name': 1}" options='{"always_reload": True}'/>
+                  <field name="h_pod_location_id" class="oe_inline"/>   
+                  <field name="h_pod_contact" class="oe_inline"/> 
+                </div> 
+                <field name="h_fnd_id" context="{'show_full_name': 1}" options='{"always_reload": True}'/> 
+              </group> 
+              <group name="group_route_right"> 
+                <field name="voyage" readonly="1"/>
+                <field name="cutoff" string="Cutoff" readonly="1"/>
+                <field name="etd"  string="ETD" readonly="1"/>                    
+                <field name="h_eta1" string="ETA" class="oe_inline"/>
+                <field name="h_eta2" string="ETA" class="oe_inline"/>
+              </group> 
+            </group>   
+            <group string="Customs" invisible="context.get('ob')"> 
+              <group>                     
+                <field name="customs_entry_number"/>                           
+                <field name="customs_entry_date"/>
+                <field name="customs_state_id"/>
+                <field name="customs_state_date"/>                  
+              </group> 
+              <group >   
+                <field name="it_place"/>                                      
+                <field name="it_number" />                    
+                <field name="it_date"/>                  
+              </group> 
+            </group>      
+            <group string="Service"> 
+              <group >                     
+                <field name="door_pickup"/>  
+              </group> 
+              <group>   
+                <field name="door_delivery"/>
+              </group> 
+            </group> 
+            <notebook> 
+              <page string="Shipment Item">
+                <field name="shipment_item_ids">
+                  <tree>
+                    <field name="house_bl_number" string="HB/L Number"/>
+                    <field name="shipper_id" string="Shipper"/>
+                    <field name="quantity" string="Package"/>
+                    <!-- <field name="brief_description" string="Description"/> -->
+                    <field name="gross_wt" string="Gross Weight"/>
+                    <field name="volume" string="CBM"/>
+                  </tree>
+                  <form>
+                    <group>
+                      <group>
+                        <field name="house_bl_number" string="HB/L Number"/>
+                        <label for="shipper_id"/>
+                        <div>
+                          <field name="shipper_id"/>
+                          <field name="shipper_label"/>
+                        </div>                    
+                      </group>
+                      <group>
+                        <label for="quantity" string="Package"/>
+                        <div>
+                          <field name="quantity" class="oe_inline"/>
+                          <field name="package_type_id" class="oe_inline"/>
+                        </div>
+                    <!-- <field name="brief_description" string="Description"/> -->
+                        <label for="gross_wt" string="Gross Weight"/>
+                        <div>
+                          <field name="gross_wt" class="oe_inline"/>
+                          <field name="gross_wt_unit_id" class="oe_inline"/>
+                        </div>
+                        <label for="volume" string="Volume"/>
+                        <div>
+                          <field name="volume" string="Volume" class="oe_inline"/>
+                          <span class="oe_inline">CBM</span>
+                        </div>
+                      </group>
+                    </group>
+                  </form>
+                </field>
+              </page>      
+              <!-- <page string="Shipment Item">
+                <field name="hbl_ids">
+                  <tree>
+                    <field name="hbl_number" string="HB/L Number"/>
+                    <field name="h_shipper_id" string="Shipper"/>
+                    <field name="brief_description" string="Description"/>
+                    <field name="hbl_quantity" string="Package"/>
+                    <field name="hbl_gross_wt" string="Gross Weight"/>
+                    <field name="hbl_volume" string="CBM"/>
+                  </tree>
+                </field>
+              </page>  -->           
+              <page string="Door Pickup" attrs="{'invisible':[('door_pickup','=',False)]}">
+                <group>
+                  <group>                  
+                    <label for="pickup_address_id" string="Contact Address"/>
+                    <div>
+                      <field name="pickup_address_id"/>
+                      <div>
+                        <field name="pickup_contact" class="oe_inline" placeholder="Contact"/>
+                        <field name="pickup_contact_phone" class="oe_inline" placeholder="Phone"/>
+                      </div>
+                      <field name="pickup_address" placeholder="Address"/>
+                    </div>
+                    <field name="pickup_time" string="Appointment Time"/>                   
+                  </group>
+                  <group>
+                    <field name="pickup_vender_id" string="Vendor"/>
+                    <field name="pickup_multi_stop" string="Multi Stop"/>
+                    <field name="pickup_remark" string="Remark"/>
+                  </group>
+                </group>
+              </page>
+              <page string="Door Delivery" attrs="{'invisible':[('door_delivery','=',False)]}">
+                <group>
+                  <group>
+                    <label for="delivery_address_id" string="Contact Address"/>
+                    <div>
+                      <field name="delivery_address_id"/>
+                      <div>
+                        <field name="delivery_contact" class="oe_inline" placeholder="Contact"/>
+                        <field name="delivery_contact_phone" class="oe_inline" placeholder="Phone"/>
+                      </div>
+                      <field name="delivery_address" placeholder="Address"/>
+                    </div>
+                    <field name="delivery_time" string="Appointment Time"/>                   
+                  </group>
+                  <group>
+                    <field name="delivery_vender_id" string="Vendor"/>
+                    <field name="delivery_multi_stop" string="Multi Stop"/>
+                    <field name="delivery_remark" string="Remark"/>
+                  </group>
+                </group> 
+              </page>
+              <page string="Shipment Note">
+                <group>
+                  <group>
+                    <field name="bl_type" string="B/L Type" widget="radio" options="{'horizontal': true}"/>
+                    <field name="payment_term" widget="radio" options="{'horizontal': true}"/>
+                    <field name="bl_issue_method" string="Issue method" widget="radio" options="{'horizontal': true}"/>
+                  </group>
+                  <group>
+                    <field name="shipment_note" string="Note"/>
+                  </group>
+                </group>
+              </page>
+            </notebook>
+          </page>            
+          <page string="Freighting">  
+          </page>                         
+        </notebook>
+      </sheet>
+      <field name="message_follower_ids"
+          widget="mail_followers" />
+      <field name="message_ids" widget="mail_thread" />      
+    </form>
+  </field>
+</record>
+
+<!-- Shipment Search View --> 
+<record id="view_shipment_filter" model="ir.ui.view">
+  <field name="name">fwdr.shipment.list.filter</field>
+  <field name="model">fwdr.shipment</field>
+  <field name="arch" type="xml">
+    <search>
+      <field name="job_number"/>
+      <field name="shipment_ids"/>
+      <field name="load_port_id"/>
+      <field name="dsch_port_id"/>
+      <field name="m_dest_port_id"/>
+      <field name="h_dest_port_id"/>
+      <filter string="My shipments" domain="[('create_uid','=',uid)]" name="my_shipments_filter"/>
+      <separator/>
+      <filter string="Open shipments" name="open_shipments" domain="[('state','=','open')]"/>
+      <!-- <filter name="filter_create_by" string="Create by Myself"
+          domain="[('create_uid','=','self.env.user')]"/>  -->         
+      <!-- <filter name="filter_not_done" string="Not Done"
+          domain="[(create_by_'is_done','=',False)]"/>
+      <filter name="filter_done" string="Done"
+          domain="[('is_done','!=',False)]"/>
+      <separator/> -->
+<!--           <filter name="group_user" string="By User"
+        context="{'group_by': 'user_id'}"/> -->
+    </search>
+  </field>
+</record> 
+
+<!-- Export Shipment actions -->    
+<record id="action_shipment" model="ir.actions.act_window">
+  <field name="name">Export Shipment</field>
+  <field name="res_model">fwdr.shipment</field>  
+  <field name="type">ir.actions.act_window</field>
+  <field name="view_type">form</field>
+  <field name="view_mode">tree,form</field>
+  <field name="context">{'ob': 1}</field> 
+</record>  
+<!-- <record id="actiom_shipment_tree" model="ir.actions.act_window.view" >
+  <field name="sequence" eval="1"/>
+  <field name="view_mode">tree</field>
+  <field name="view_id" ref="view_shipment_tree"/>      
+  <field name="act_window_id" ref="action_shipment"/>
+</record> -->
+<!-- <record id="actiom_shipment_form" model="ir.actions.act_window.view" >
+  <field name="sequence" eval="2"/>
+  <field name="view_mode">form</field>
+  <field name="view_id" ref="view_shipment_form"/>      
+  <field name="act_window_id" ref="action_shipment"/>
+</record> -->
+
+<!-- Import Shipment actions -->    
+<record id="action_ib_shipment" model="ir.actions.act_window">
+  <field name="name">Export Shipment</field>
+  <field name="res_model">fwdr.shipment</field>  
+  <field name="type">ir.actions.act_window</field>
+  <field name="view_type">form</field>
+  <field name="view_mode">tree,form</field>
+  <field name="domain">[('ib_start_uid','=', False)]</field>
+</record> 
+
+<!-- menu -->    
+<menuitem name="Forwarding" id="menu_fwdr"/>    
+
+<menuitem name="Export" id="menu_ob" parent="menu_fwdr" sequence="1"/>      
+<menuitem name="Shipment" id="menu_ob_shipment" parent="menu_ob" action="action_shipment" sequence="2" /> 
+
+<menuitem name="Import" id="menu_ib" parent="menu_fwdr"  sequence="2"/>  
+<menuitem name="Shipment" id="menu_ib_shipment" parent="menu_ib" action="action_ib_shipment" sequence="2" /> 
+
+</data>
+</odoo>
