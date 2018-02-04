@@ -159,9 +159,9 @@
                 <!-- <label for="ib_office_id" string="Agent"/> -->
                 <div>
                   <div><strong>Destination Agent</strong></div> 
-                  <div>
+                  <!-- <div>
                     <field name="ib_office_id" readonly="1"/>
-                  </div>
+                  </div> -->
                   <field name="agent_label"/>
                 </div>                               
               </group> 
@@ -493,9 +493,9 @@
                 <!-- <label for="ib_office_id" string="Agent"/> -->
                 <div>
                   <div><strong>Destination Agent</strong></div> 
-                  <div>
+                  <!-- <div>
                     <field name="ib_office_id" readonly="1"/>
-                  </div>
+                  </div> -->
                   <field name="agent_label"/>
                 </div>                               
               </group> 
@@ -701,12 +701,12 @@
   <field name="view_type">form</field>
   <field name="view_mode">tree,form</field>
   <field name="domain">[]</field> 
-  <field name="context">{'ob': 1}</field> 
+  <field name="context">{'ob': 1,'default_state': 'open',}</field> 
 </record>  
 <record id="actiom_shipment_tree1" model="ir.actions.act_window.view" >
   <field name="sequence" eval="1"/>
   <field name="view_mode">tree</field>
-  <field name="view_id" ref="view_shipment_tree"/>      
+  <field name="view_id" ref="view_shipment_tree1"/>      
   <field name="act_window_id" ref="action_shipment1"/>
 </record>
 <record id="actiom_shipment_form1" model="ir.actions.act_window.view" >
@@ -728,17 +728,18 @@
           'ib': 1,
           'default_ib_transaction_date':current_date, 
           'default_ib_start_uid': uid,
-          'default_state': 'ib_start',
+          'default_ib_start': 1,
+          <!-- 'default_state': 'ib_start', -->
           }
   </field>  
 </record>  
-<record id="actiom_shipment_tree1" model="ir.actions.act_window.view" >
+<record id="actiom_shipment_tree2" model="ir.actions.act_window.view" >
   <field name="sequence" eval="1"/>
   <field name="view_mode">tree</field>
   <field name="view_id" ref="view_shipment_tree1"/>      
   <field name="act_window_id" ref="action_shipment2"/>
 </record>
-<record id="actiom_shipment_form1" model="ir.actions.act_window.view" >
+<record id="actiom_shipment_form2" model="ir.actions.act_window.view" >
   <field name="sequence" eval="2"/>
   <field name="view_mode">form</field>
   <field name="view_id" ref="view_shipment_form1"/>      
