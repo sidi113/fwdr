@@ -712,7 +712,7 @@
 <record id="actiom_shipment_form1" model="ir.actions.act_window.view" >
   <field name="sequence" eval="2"/>
   <field name="view_mode">form</field>
-  <field name="view_id" ref="view_shipment_form"/>      
+  <field name="view_id" ref="view_shipment_form1"/>      
   <field name="act_window_id" ref="action_shipment1"/>
 </record>
 
