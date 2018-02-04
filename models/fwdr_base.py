@@ -167,3 +167,15 @@ class TransitCategory(models.Model):
             name = name.split(' / ')[-1]
             args = [('name', operator, name)] + args
         return self.search(args, limit=limit).name_get()
+
+
+class ProductUoM(models.Model):
+    _name = 'product.uom'
+    _description = 'Product Unit of Measure'   
+    _inherit = 'product.uom' 
+
+
+class ProductUoMCategory(models.Model):
+    _name = 'product.uom.categ'
+    _description = 'Product UoM Categories'
+    _inherit = 'product.uom.categ' 

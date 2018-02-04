@@ -19,6 +19,7 @@ class PartnerCategory(models.Model):
     seqence = fields.Integer()
 
 
-
-
+class PartnerTitle(models.Model):
+    _name = 'res.partner.title'
+    _inherit = 'res.partner.title' 
 

@@ -6,8 +6,28 @@
             <field name="name">Job for user company</field>
             <field name="model_id" ref="model_fwdr_job"/>
             <!-- <field name="domain_force">[('create_uid','!=',user.id)]</field> -->
-            <field name="domain_force">['|',('ob_office_id','=',False),('ob_office_id','child_of',[user.company_id.id])]</field>
+            <field name="domain_force">
+                ['|',('ob_office_id','child_of',[user.company_id.id]),('ib_office_id','child_of',[user.company_id.id])]
+            </field>
             <!-- <field name="domain_force">['|',('ob_office_id','=',False),('ob_office_id','=',[user.company_id.id])]</field> -->
+            <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+        </record>
+
+        <record id="shipment_user_rule" model="ir.rule">
+            <field name="name">Shipment for user company</field>
+            <field name="model_id" ref="model_fwdr_shipment"/>            
+            <field name="domain_force">
+                ['|',('ob_office_id','child_of',[user.company_id.id]),('ib_office_id','child_of',[user.company_id.id])]
+            </field>
+            <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+        </record>
+
+        <record id="shipment_item_user_rule" model="ir.rule">
+            <field name="name">Shipment Item for user company</field>
+            <field name="model_id" ref="model_fwdr_shipment_item"/>            
+            <field name="domain_force">
+                ['|',('ob_office_id','child_of',[user.company_id.id]),('ib_office_id','child_of',[user.company_id.id])]
+            </field>
             <field name="groups" eval="[(4,ref('base.group_user'))]"/>
         </record>
 
