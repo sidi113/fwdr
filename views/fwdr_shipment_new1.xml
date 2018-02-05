@@ -729,7 +729,6 @@
           'default_ib_transaction_date':current_date, 
           'default_ib_start_uid': uid,
           'default_ib_start': 1,
-          <!-- 'default_state': 'ib_start', -->
           }
   </field>  
 </record>  
@@ -755,14 +754,35 @@
   <field name="domain">[('ib_start_uid','=', False)]</field>
 </record>  -->
 
+<record id="action_ib_shipment" model="ir.actions.server">
+  <field name="name">Export Shipment View Action</field>
+  <field name="model_id" ref="fwdr.model_fwdr_shipment"/>
+  <field name="state">code</field>
+  <field name="code">
+    action = env['fwdr.shipment'].action_view_shipment(cr, uid, context=context, bound='ib')
+  </field>
+  <field eval="True" name="condition"/>
+</record>
+
+<record id="action_ob_shipment" model="ir.actions.server">
+  <field name="name">Import Shipment View Action</field>
+  <field name="model_id" ref="fwdr.model_fwdr_shipment"/>
+  <field name="state">code</field>
+  <field name="code">
+    action = env['fwdr.shipment'].action_view_shipment(cr, uid, context=context, bound='ob')
+  </field>
+  <field eval="True" name="condition"/>
+</record>
+
 <!-- menu -->    
 <menuitem name="Forwarding" id="menu_fwdr"/>    
 
 <menuitem name="Export" id="menu_ob" parent="menu_fwdr" sequence="1"/>      
 <menuitem name="Shipment New" id="menu_ob_shipment1" parent="menu_ob" action="action_shipment1" sequence="2" /> 
+<menuitem name="Shipment New1" id="menu_ib_shipment2" parent="menu_ib" action="action_ob_shipment" sequence="2" /> 
 
 <menuitem name="Import" id="menu_ib" parent="menu_fwdr"  sequence="2"/>  
 <menuitem name="Shipment New" id="menu_ib_shipment1" parent="menu_ib" action="action_shipment2" sequence="2" /> 
-
+<menuitem name="Shipment New1" id="menu_ib_shipment2" parent="menu_ib" action="action_ib_shipment" sequence="2" /> 
 </data>
 </odoo>

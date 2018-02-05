@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from lxml import etree
 from odoo import models, fields, api, _
 
 def print_label(self, partner):
@@ -314,6 +314,38 @@ class Shipment(models.Model):
             'context': ctx,
         } 
 
+    def action_view_shipment(self, cr, uid, context=None, bound=None):
+        tree_id = self.env.ref("fwdr.view_shipment_tree1")
+        form_id = self.env.ref("fwdr.view_shipment_form1")
+        domain = []
+        cmpy = self.env.user.company_id.id
+        if bound == 'ob':
+            domain = [('ob_office_id','=',cmpy)]
+            context.update({
+                'ob': 1, 
+                'default_ob_transaction_date':fields.date.today().strftime('%Y-%m-%d'),
+            })
+        if bound == 'ib':
+            domain = [('ib_office_id','=',cmpy)]
+            context.update({
+                'ib': 1, 
+                'default_ib_start_uid': uid,
+                'default_ib_transaction_date':fields.date.today().strftime('%Y-%m-%d'),
+                'default_ib_start': 1,
+            })
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Shipment',
+            'view_type': 'form',
+            'view_mode': 'tree,form',
+            'res_model': 'fwdr.shipment',
+            'domain': domain,
+            # if you don't want to specify form for example
+            # (False, 'form') just pass False 
+            'views': [(tree_id.id, 'tree'), (form_id.id, 'form')],
+            # 'target': 'current',
+            'context': context
+        }
 
 # House B/L
 class FwdrShipmentHbl(models.Model):
