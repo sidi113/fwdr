@@ -6,7 +6,6 @@ class Partner(models.Model):
     _name = 'res.partner'
     _inherit = 'res.partner'
 
-    port_id = fields.Many2one('fwdr.port', string="Port")
     print_label = fields.Text(string="Print Label")
     alias = fields.Char()
 

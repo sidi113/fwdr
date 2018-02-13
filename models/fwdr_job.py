@@ -80,11 +80,13 @@ class FwdrJob(models.Model):
 
     job_number = fields.Char(string="Job ID", required=True, readonly=True, copy=False, default=lambda self: _('New'))
     master_shipment_id = fields.Many2one('fwdr.shipment', string="Shipment #")
-    transit_type_id = fields.Many2one('fwdr.transit.category', string="Transit Type")
+    transit_type_id = fields.Many2one('fwdr.transit.type', string="Transit Type")
     # transit_type = fields.Many2one('fwdr.tansit.category', string="Transit Type")
     traffic_mode = fields.Selection([
-        ('fcl', 'FCL'),
-        ('lcl', 'LCL')],
+        ('fcl','FCL'),
+        ('lcl','LCL'),
+        ('colo','CO-LO'),
+        ('air','Air')],
         default='fcl',
         string="Traffic Mode")
     m_traffic_term_id = fields.Many2one('fwdr.traffic.term', string="Traffic Term")
@@ -103,10 +105,10 @@ class FwdrJob(models.Model):
     # executing_carrier_id = fields.Many2one('res.partner', string="Executing Carrier")
 
     # route
-    pol_location_id = fields.Many2one('res.partner', string="POL Location", 
+    pol_location_id = fields.Many2one('fwdr.terminal', string="POL Location", 
         domain="[('port_id', '=', load_port_id)]")
     pol_contact = fields.Char(string="POL Contact")
-    m_pod_location_id = fields.Many2one('res.partner', string="POD Location",
+    m_pod_location_id = fields.Many2one('fwdr.terminal', string="POD Location",
         domain="[('port_id', '=', m_dest_port_id)]")    
     m_pod_contact = fields.Char(string="POD Contact")    
     load_port_id = fields.Many2one('fwdr.port', string="Load Port")
@@ -161,6 +163,7 @@ class FwdrJob(models.Model):
     ib_start = fields.Boolean()
     ob_invoice_count = fields.Integer(string='# Invoices')
     shipment_count = fields.Integer(string='# Shipments', compute='_shipment_count')
+    multi_shmt = fields.Boolean(compute='_shipment_count', string="Multi Shipments", store=True)
     hbl_count = fields.Integer(string='# House B/L', compute='_hbl_count')
     # is_ib_office = fields.Boolean(compute='_get_cu')
 
@@ -239,9 +242,12 @@ class FwdrJob(models.Model):
 
     @api.depends('shipment_ids')    
     def _shipment_count(self):  
-        # for r in self:         
-        shipments = self.mapped('shipment_ids')
-        self.shipment_count = len(shipments)        
+        count = len(self.shipment_ids.filtered(lambda r: r.state != 'cancel')) 
+        self.shipment_count = count
+        if count > 1:
+           self.multi_shmt = True      
+        else:
+           self.multi_shmt = False      
 
     @api.multi
     def action_view_shipment(self):

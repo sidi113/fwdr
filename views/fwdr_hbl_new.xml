@@ -1,0 +1,75 @@
+<odoo>
+<data>
+<!-- House B/L view -->    
+<record id="view_shipment_item_tree" model="ir.ui.view" >
+  <field name="name">fwdr.shipment.item.tree</field>
+  <field name="model">fwdr.shipment.item</field>
+  <field name="arch" type="xml">
+    <tree string="House B/L" delete="false" create="false" copy="false">
+      <field name="hbl_number"/>
+      <field name="shipment_id"/>
+      <field name="job_id"/>
+      <field name="shipper_id"/>
+      <field name="consignee_id"/>
+    </tree>
+  </field>
+</record>
+<record id="view_shipment_item_form" model="ir.ui.view">
+  <field name="name">fwdr.shipment.item.form</field>
+  <field name="model">fwdr.shipment.item</field>
+  <field name="arch" type="xml">
+    <form string="House B/L" delete="false" create="false" copy="false">
+<!--       <header>
+          <button string="Print" type="action" class="btn-primary"/>            
+      </header>  -->
+      <sheet>   
+        <div class="oe_title">               
+          <h1><field name="hbl_number" default_focus="1" placeholder="House B/L#"/></h1>                
+        </div>            
+        <group>
+          <group>            
+            <label for="shipper_id"/>
+            <div>
+              <field name="shipper_id"/>
+              <field name="shipper_label"/>
+            </div>                    
+          </group>
+          <group>
+            <label for="quantity" string="Package"/>
+            <div>
+              <field name="quantity" class="oe_inline"/>
+              <field name="package_type_id" class="oe_inline"/>
+            </div>
+        <!-- <field name="brief_description" string="Description"/> -->
+            <label for="gross_wt" string="Gross Weight"/>
+            <div>
+              <field name="gross_wt" class="oe_inline"/>
+              <field name="gross_wt_unit_id" class="oe_inline"/>
+            </div>
+            <label for="volume" string="Volume"/>
+            <div>
+              <field name="volume" string="Volume" class="oe_inline"/>
+              <span class="oe_inline">CBM</span>
+            </div>
+          </group>
+        </group>
+      </sheet>
+    </form>
+  </field>
+</record>
+<record id="action_shipment_item" model="ir.actions.act_window" >
+  <field name="name">House Bill</field>
+  <field name="res_model">fwdr.shipment.item</field>
+  <field name="view_mode">tree,form</field>
+</record>
+
+
+ <!-- menu -->    
+<!-- <menuitem name="Forwarding" id="menu_fwdr"/>    
+
+<menuitem name="Export" id="menu_ob" parent="menu_fwdr" sequence="1"/>      
+<menuitem name="House B/L" id="menu_hbl" parent="menu_ob" action="action_shipment_item" sequence="4" />  -->
+
+
+</data>
+</odoo>

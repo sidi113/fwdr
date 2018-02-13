@@ -2,7 +2,7 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_container_type,fwdr_container_type,model_fwdr_container_type,base.group_user,1,1,1,1
 access_customs_state,fwdr_customs_state,model_fwdr_customs_state,base.group_user,1,1,1,1
 access_scac_code,fwdr_scac_code,model_fwdr_scac_code,base.group_user,1,1,1,1
-access_transit_category,fwdr_transit_category,model_fwdr_transit_category,base.group_user,1,1,1,1
+access_transit_type,fwdr_transit_type,model_fwdr_transit_type,base.group_user,1,1,1,1
 access_city,res_city,model_res_city,base.group_user,1,1,1,1
 access_county,res_county,model_res_county,base.group_user,1,1,1,1
 access_port,fwdr_port,model_fwdr_port,base.group_user,1,1,1,1

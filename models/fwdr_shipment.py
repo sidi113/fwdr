@@ -11,7 +11,7 @@ def print_label(self, partner):
     if partner.city:
         label = "%s\n%s" % (label, partner.city)
     if partner.state_id:
-        state = self.env['res.state'].browse(partner.state_id.id).with_context(lang=None).read(['name'])
+        state = self.env['res.country.state'].browse(partner.state_id.id).with_context(lang=None).read(['name'])
         label = "%s, %s" % (label, state[0]['name'])                
     if partner.zip:
         label = "%s, %s" % (label, partner.zip)
@@ -135,7 +135,7 @@ class Shipment(models.Model):
     # h_pol_location_id = fields.Many2one('res.partner', string="POL Location", 
         # domain="[('port_id', '=', m_load_port_id)]")
     # h_pol_contact = fields.Char(string="POL Contact")
-    h_pod_location_id = fields.Many2one('res.partner', string="POD Location",
+    h_pod_location_id = fields.Many2one('fwdr.terminal', string="POD Location",
         domain="[('port_id', '=', m_dest_port_id)]")  
     h_pod_contact = fields.Char(string="POD Contact")    
     # h_load_port_id = fields.Many2one('fwdr.port', string="Load Port")
@@ -207,8 +207,8 @@ class Shipment(models.Model):
         string="Invoice Status", 
         readonly=True)
         # ], string='Invoice Status', compute='_get_invoiced', store=True, readonly=True)
-    hbl_count = fields.Integer(string='# of HB/L', compute='_get_hbl', readonly=True)
-    mbl_count = fields.Integer(string='# of MB/L', compute='_get_mbl', readonly=True)
+    shmt_item_count = fields.Integer(string='# of HB/L', compute='_hbl_count', readonly=True)
+    # mbl_count = fields.Integer(string='# of MB/L', compute='_mbl_count', readonly=True)
     invoice_count = fields.Integer(string='# of Invoices', compute='_get_invoiced', readonly=True)    
 
     # Cargo Summary
@@ -262,17 +262,24 @@ class Shipment(models.Model):
                 label = print_label(self, partner)           
         self.notify_label = label 
 
-    @api.depends('state')
-    def _get_hbl(self):
-        return True
+    @api.depends('shipment_item_ids')
+    def _hbl_count(self):
+        count = len(self.mapped('shipment_item_ids'))
+        self.shmt_item_count = count
 
     @api.multi
     def action_view_hbl(self):
-        return True
-
-    @api.depends('state')
-    def _get_mbl(self):
-        return True
+        # action = {}
+        hbls = self.mapped('shipment_item_ids')                              
+        action = self.env.ref('fwdr.action_shipment_item').read()[0]
+        if len(hbls) > 1:
+            action['domain'] = [('id', 'in', hbls.ids)]
+        elif len(hbls) == 1:
+            action['views'] = [(self.env.ref('fwdr.view_shipment_item_form').id, 'form')]
+            action['res_id'] = hbls.ids[0]
+        else:
+            action = {'type': 'ir.actions.act_window_close'}
+        return action
 
     @api.multi
     def action_view_mbl(self):
@@ -289,10 +296,20 @@ class Shipment(models.Model):
     @api.multi
     def action_cancel_shipment(self):
         self.write({'state': 'cancel'})
+        self.write({'shipment_count':self.shipment_count - 1 })
+        if self.shipment_count > 1:
+            self.write({'multi_shmt': True})
+        else:
+            self.write({'multi_shmt': False})
 
     @api.multi
     def action_reactive_shipment(self):
         self.write({'state': 'open'})
+        self.write({'shipment_count':self.shipment_count + 1 })
+        if self.shipment_count > 1:
+            self.write({'multi_shmt': True})
+        else:
+            self.write({'multi_shmt': False})
 
     @api.multi
     def action_multi_shipment(self):
@@ -314,18 +331,34 @@ class Shipment(models.Model):
             'context': ctx,
         } 
 
+    @api.multi
+    def action_view_multi_shmt(self):
+        action = {}
+        shipments = self.mapped('job_id.shipment_ids')                              
+        action = self.env.ref('fwdr.action_shipment').read()[0]
+        if len(shipments) > 1:
+            action['domain'] = ['&',('id', 'in', shipments.ids),('state', '!=', 'cancel')]
+        # elif len(shipments) == 1:
+        #     action['views'] = [(self.env.ref('fwdr.view_shipment_form').id, 'form')]
+        #     action['res_id'] = shipments.ids[0]
+        else:
+            action = {'type': 'ir.actions.act_window_close'}
+        return action
+
     def action_view_shipment(self, cr, uid, context=None, bound=None):
         tree_id = self.env.ref("fwdr.view_shipment_tree1")
         form_id = self.env.ref("fwdr.view_shipment_form1")
         domain = []
         cmpy = self.env.user.company_id.id
         if bound == 'ob':
+            name='Export Shipment'
             domain = [('ob_office_id','=',cmpy)]
             context.update({
                 'ob': 1, 
                 'default_ob_transaction_date':fields.date.today().strftime('%Y-%m-%d'),
             })
         if bound == 'ib':
+            name='Import Shipment'
             domain = [('ib_office_id','=',cmpy)]
             context.update({
                 'ib': 1, 
@@ -335,7 +368,7 @@ class Shipment(models.Model):
             })
         return {
             'type': 'ir.actions.act_window',
-            'name': 'Shipment',
+            'name': name,
             'view_type': 'form',
             'view_mode': 'tree,form',
             'res_model': 'fwdr.shipment',
@@ -391,10 +424,10 @@ class FwdrShipmentHbl(models.Model):
 
 class ShipmentItem(models.Model):
     _name = 'fwdr.shipment.item'
-    _rec_name = 'house_bl_number'
+    _rec_name = 'hbl_number'
     _inherits = {'fwdr.shipment': 'shipment_id'}
 
-    house_bl_number = fields.Char()
+    hbl_number = fields.Char()
     shipper_id = fields.Many2one('res.partner', string="Shipper")
     shipper_label = fields.Text(string="Shipper")
     gross_wt = fields.Float()

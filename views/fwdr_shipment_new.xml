@@ -187,7 +187,7 @@
               <page string="Shipment Item">
                 <field name="shipment_item_ids">
                   <tree>
-                    <field name="house_bl_number" string="HB/L Number"/>
+                    <field name="hbl_number" string="HB/L Number"/>
                     <field name="shipper_id" string="Shipper"/>
                     <field name="quantity" string="Package"/>
                     <!-- <field name="brief_description" string="Description"/> -->
@@ -197,7 +197,7 @@
                   <form>
                     <group>
                       <group>
-                        <field name="house_bl_number" string="HB/L Number"/>
+                        <field name="hbl_number" string="HB/L Number"/>
                         <label for="shipper_id"/>
                         <div>
                           <field name="shipper_id"/>
@@ -305,33 +305,6 @@
   </field>
 </record>
 
-<!-- Shipment Search View --> 
-<record id="view_shipment_filter" model="ir.ui.view">
-  <field name="name">fwdr.shipment.list.filter</field>
-  <field name="model">fwdr.shipment</field>
-  <field name="arch" type="xml">
-    <search>
-      <field name="job_number"/>
-      <field name="shipment_ids"/>
-      <field name="load_port_id"/>
-      <field name="dsch_port_id"/>
-      <field name="m_dest_port_id"/>
-      <field name="h_dest_port_id"/>
-      <filter string="My shipments" domain="[('create_uid','=',uid)]" name="my_shipments_filter"/>
-      <separator/>
-      <filter string="Open shipments" name="open_shipments" domain="[('state','=','open')]"/>
-      <!-- <filter name="filter_create_by" string="Create by Myself"
-          domain="[('create_uid','=','self.env.user')]"/>  -->         
-      <!-- <filter name="filter_not_done" string="Not Done"
-          domain="[(create_by_'is_done','=',False)]"/>
-      <filter name="filter_done" string="Done"
-          domain="[('is_done','!=',False)]"/>
-      <separator/> -->
-<!--           <filter name="group_user" string="By User"
-        context="{'group_by': 'user_id'}"/> -->
-    </search>
-  </field>
-</record> 
 
 <!-- Export Shipment actions -->    
 <record id="action_shipment" model="ir.actions.act_window">

@@ -335,11 +335,11 @@
 <menuitem name="Forwarding" id="menu_fwdr"/>    
 
 <menuitem name="Export" id="menu_ob" parent="menu_fwdr" sequence="1"/>      
-<menuitem name="Job" id="menu_ob_job" parent="menu_ob" action="action_ob_job" sequence="1" />
+<!-- <menuitem name="Job" id="menu_ob_job" parent="menu_ob" action="action_ob_job" sequence="1" /> -->
 
 <menuitem name="Import" id="menu_ib" parent="menu_fwdr"  sequence="2"/>  
 <menuitem name="Incoming Job" id="menu_incoming_job" parent="menu_ib" action="action_incoming_job" sequence="1" /> 
-<menuitem name="Job" id="menu_ib_job" parent="menu_ib" action="action_ib_job" sequence="2" />  
+<!-- <menuitem name="Job" id="menu_ib_job" parent="menu_ib" action="action_ib_job" sequence="2" />   -->
 
 </data>
 </odoo>

@@ -70,8 +70,9 @@ class Port(models.Model):
     category = fields.Selection([
         ('air', 'Airport'),
         ('sea', 'Seaport')])
+    comment = fields.Text(string='Notes')
     active = fields.Boolean(default=True)
-    terminal_ids = fields.One2many('res.partner', 'port_id', string=u"Terminal")
+    terminal_ids = fields.One2many('fwdr.terminal', 'port_id', string=u"Terminal")
 
     @api.multi
     def name_get(self):
@@ -88,16 +89,19 @@ class Port(models.Model):
                 res.append((port.id, name)) 
         return res
 
-    @api.model  
-    def name_search(self,name='',args=None,operator='ilike',limit=100):  
-        args = args or []  
-        domain = []  
-        if name:  
-            domain = ['|',
-                ('name',operator,name),
-                ('code',operator,name)]  
-        pos = self.search(domain + args,limit=limit)  
-        return pos.name_get()  
+class Terminal(models.Model):
+    _description = "Terminal"
+    _name = 'fwdr.terminal' 
+
+    name = fields.Char(required=True)
+    port_id = fields.Many2one('fwdr.port', string="Port", required=True)
+    state_id = fields.Many2one('res.country.state', related='port_id.state_id', string=u"State", store=True)
+    country_id = fields.Many2one('res.country', related='port_id.country_id', string=u"Country", store=True)
+    street = fields.Char()
+    street2 = fields.Char()
+    phone = fields.Char()
+    comment = fields.Text(string='Notes')
+    active = fields.Boolean(default=True)
 
 # class FmsLocation(models.Model):
 #     _name = 'fms.location'

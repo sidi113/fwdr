@@ -2,14 +2,13 @@
 
 from odoo import models, fields, api
 
-# Container Type
-class FwdrContainerType(models.Model):
+class ContainerType(models.Model):
     _description = 'Container Type'
     _name = 'fwdr.container.type'
 
     name = fields.Char(string="Type", size=4, required=True)
     size = fields.Char(size=2)
-    report_type = fields.Char(string="Report Type", size=2)
+    report_type = fields.Char(string="Report Type", size=2, select=True)
     description = fields.Char(translate=True)
     is_reefer = fields.Boolean(string="Reefer")
     teu = fields.Integer(string="TEU")
@@ -22,17 +21,14 @@ class FwdrContainerType(models.Model):
     active = fields.Boolean(default=True)
 
 
-# Vessel
-class FwdrVessel(models.Model):
+class Vessel(models.Model):
     _description = 'Vessel'
     _name = 'fwdr.vessel'
 
-    name = fields.Char(string="Vessel Name")
+    name = fields.Char(string=u"Vessel Name", required=True)
     active = fields.Boolean(default=True)
 
-
-# Vessel Schedule
-class FwdrVesselSchedule(models.Model):
+class VesselSchedule(models.Model):
     _description = 'Vessel Schedule'
     _name = 'fwdr.vessel.schedule'
 
@@ -42,9 +38,7 @@ class FwdrVesselSchedule(models.Model):
     etd = fields.Date(string="ETD")
     active = fields.Boolean(default=True)
 
-
-# Carrier
-class FwdrCarrier(models.Model):
+class Carrier(models.Model):
     _name = 'fwdr.carrier'
 
     name = fields.Char(string="Carrier", required=True, translate=True)
@@ -58,26 +52,29 @@ class FwdrCarrier(models.Model):
     remark = fields.Text()
     active = fields.Boolean(default=True)
 
-
-# Customs Status 
-class FwdrCustomsStatus(models.Model):
+class CustomsStatus(models.Model):
     _description = 'Customs Status'
     _name = 'fwdr.customs.state'
 
-    name = fields.Char(string="Status", translate=True, required=True)
+    name = fields.Char(string=u"Customs Status", translate=True, required=True)
     active = fields.Boolean(default=True)
 
+class ReferenceType(models.Model):
+    _description = 'Reference Type'
+    _name = 'fwdr.reference.type'
 
-# SCAC Code 
-class FwdrScacCode(models.Model):
+    name = fields.Char(string=u"Type", translate=True, required=True)
+    active = fields.Boolean(default=True)
+
+class ScacCode(models.Model):
     _description = 'SCAC Code'
     _name = 'fwdr.scac.code'
 
     name = fields.Char(string="SCAC Code", size=4, required=True)
+    carrier_id = fields.Many2one('res.partner', string="Carrier")
     active = fields.Boolean(default=True)
 
-# Cargo Nature
-class FwdrCargoNature(models.Model):
+class CargoNature(models.Model):
     _description = 'Cargo Nature'
     _name = 'fwdr.cargo.nature'
 
@@ -86,29 +83,23 @@ class FwdrCargoNature(models.Model):
     seqence = fields.Integer()
     active = fields.Boolean(default=True)
 
-
-# Traffic Term
-class FwdrTrafficTerm(models.Model):
+class TrafficTerm(models.Model):
     _description = 'Traffic Term'
     _name = 'fwdr.traffic.term'
 
-    name = fields.Char(string="Traffic Term", required=True)
+    name = fields.Char(string=u"Traffic Term", required=True)
     seqence = fields.Integer()
     active = fields.Boolean(default=True)
 
-
-# Traffic Mode
-class FwdrTrafficTerm(models.Model):
+class TrafficMode(models.Model):
     _description = 'Traffic Mode'
     _name = 'fwdr.traffic.mode'    
 
-    name = fields.Char(string="Traffic Mode", required=True)
+    name = fields.Char(string=u"Traffic Mode", required=True)
     seqence = fields.Integer()
     active = fields.Boolean(default=True)
 
-
-# Transit Type
-class FwdrTransitType(models.Model):
+class TransitType(models.Model):
     _description = 'Transit Type'
     _name = 'fwdr.transit.type'
 

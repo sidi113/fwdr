@@ -1,8 +1,7 @@
 <odoo>
   <data>
-
-    <!-- tree view: Carrier - Lines -->    
-    <record model="ir.ui.view" id="carrier_tree">
+    <!-- view: Carrier - Lines -->    
+    <record id="view_carrier_tree" model="ir.ui.view">
       <field name="name">Carrier</field>
       <field name="model">fwdr.carrier</field>
       <field name="arch" type="xml">
@@ -11,12 +10,13 @@
           <field name="name"/>                
           <field name="bl_prefix" />           
           <field name="country_id"/> 
+          <field name="active" invisible="1"/>
         </tree>
       </field>
     </record>
 
     <!-- tree view: Carrier - Air Lines -->    
-    <record model="ir.ui.view" id="carrier_tree1">
+    <record id="view_carrier_tree1" model="ir.ui.view">
       <field name="name">Carrier</field>
       <field name="model">fwdr.carrier</field>
       <field name="arch" type="xml">
@@ -26,16 +26,17 @@
           <field name="iata_code" />                   
           <field name="bl_prefix" />           
           <field name="country_id"/> 
+          <field name="active" invisible="1"/>
         </tree>
       </field>
     </record>
 
     <!-- form view: Carrier  -->    
-    <record model="ir.ui.view" id="carrier_form">
+    <record id="view_carrier_form" model="ir.ui.view">
       <field name="name">Carrier</field>
       <field name="model">fwdr.carrier</field>
       <field name="arch" type="xml">
-        <form string="Carrier" delete="false" editable="top" default_order="short_name desc">          
+        <form string="Carrier" delete="false" >          
           <sheet>
             <div class="oe_title"> 
               <h1> <label for="name" /> 
@@ -60,7 +61,7 @@
     </record>
 
     <!-- actions: Carrier - Lines -->    
-    <record model="ir.actions.act_window" id="carrier_action">
+    <record id="action_carrier" model="ir.actions.act_window">
       <field name="name">Lines</field>
       <field name="res_model">fwdr.carrier</field>
       <field name="view_mode">tree,form</field>
@@ -69,7 +70,7 @@
     </record>
 
     <!-- actions: Carrier - Air Lines -->    
-    <record model="ir.actions.act_window" id="carrier_action1">
+    <record id="action_carrier1" model="ir.actions.act_window">
       <field name="name">Air Lines</field>
       <field name="res_model">fwdr.carrier</field>
       <field name="view_mode">tree,form</field>
@@ -77,11 +78,11 @@
       <field name="domain">[('category', '=', 'air')]</field>
     </record>
 
-    <record model="ir.actions.act_window.view" id="carrier_actiom_tree">
+<!--     <record id="action_carrier_tree" model="ir.actions.act_window.view" >
       <field name="sequence" eval="1"/>
       <field name="view_mode">tree</field>
       <field name="view_id" ref="carrier_tree"/>      
-      <field name="act_window_id" ref="carrier_action"/>
+      <field name="act_window_id" ref="action_carrier"/>
     </record>
 
     <record model="ir.actions.act_window.view" id="carrier_actiom_tree1">
@@ -89,29 +90,27 @@
       <field name="view_mode">tree</field>
       <field name="view_id" ref="carrier_tree1"/>      
       <field name="act_window_id" ref="carrier_action1"/>
-    </record>
+    </record> -->
 
-    <!-- tree view: Vessel -->    
-    <record model="ir.ui.view" id="vessel_tree">
+    <!-- view: Vessel -->    
+    <record id="view_vessel_tree" model="ir.ui.view">
       <field name="name">Vessel</field>
       <field name="model">fwdr.vessel</field>
       <field name="arch" type="xml">
         <tree string="Vessel" delete="false" editable="top" default_order="name desc">          
           <field name="name"/>                    
-          <field name="active"/>  
+          <field name="active" invisible="1"/>  
         </tree>
       </field>
     </record>
-
-    <!-- actions: Vessel -->    
-    <record model="ir.actions.act_window" id="vessel_action">
+    <record id="action_vessel" model="ir.actions.act_window">
       <field name="name">Vessel</field>
       <field name="res_model">fwdr.vessel</field>
       <field name="view_mode">tree</field>
     </record>
 
     <!-- tree view: Vessel Schedule-->    
-    <record model="ir.ui.view" id="vessel_schedule_tree">
+<!--     <record id="view_vessel_schedule_tree" model="ir.ui.view">
       <field name="name">Vessel Schedule</field>
       <field name="model">fwdr.vessel.schedule</field>
       <field name="arch" type="xml">
@@ -123,29 +122,26 @@
         </tree>
       </field>
     </record>
-
-    <!-- actions: Vessel Schedule -->    
-    <record model="ir.actions.act_window" id="vessel_schedule_action">
+    <record id="action_vessel_schedule" model="ir.actions.act_window">
       <field name="name">Vessel Schedule</field>
       <field name="res_model">fwdr.vessel.schedule</field>
-      <field name="view_mode">tree</field>
-    </record>
+      <field name="view_mode">tree,form</field>
+    </record> -->
 
     <!-- tree view: Container Type -->    
-    <record model="ir.ui.view" id="container_type_tree">
+    <record id="view_container_type_tree" model="ir.ui.view">
       <field name="name">Container Type</field>
       <field name="model">fwdr.container.type</field>
       <field name="arch" type="xml">
         <tree string="Container Type" delete="false" default_order="name aesc">          
           <field name="name"/>          
           <field name="description"/>
-          <field name="is_reefer" widget="checkbox"/>          
+          <field name="is_reefer" widget="checkbox"/> 
+          <field name="active" invisible="1"/>         
         </tree>
       </field>
     </record>
-
-    <!-- form view: Container Type -->    
-    <record model="ir.ui.view" id="container_type_form">
+    <record id="view_container_type_form" model="ir.ui.view">
       <field name="name">Container Type</field>
       <field name="model">fwdr.container.type</field>
       <field name="arch" type="xml">
@@ -176,47 +172,61 @@
         </form>
       </field>
     </record>
-
-    <!-- actions: Container Type -->    
-    <record model="ir.actions.act_window" id="container_type_action">
+    <record id="action_container_type" model="ir.actions.act_window">
       <field name="name">Container Type</field>
       <field name="res_model">fwdr.container.type</field>
       <field name="view_mode">tree,form</field>
     </record>
 
 
-    <!-- tree view: Customs Status -->    
-    <record model="ir.ui.view" id="customs_state_tree">
+    <!-- view: Customs Status -->    
+    <record id="view_customs_state_tree" model="ir.ui.view">
       <field name="name">Customs Status</field>
       <field name="model">fwdr.customs.state</field>
       <field name="arch" type="xml">
-        <tree editable="top" string="Customs Status" delete="false" >          
-          <field name="name"/>                       
+        <tree editable="top" string="Customs Status" delete="false" default_order="name aesc">          
+          <field name="name"/>
+          <field name="active" invisible="1"/>                       
         </tree>
       </field>
-    </record>
-
-    <!-- actions: Customs Status -->    
-    <record model="ir.actions.act_window" id="customs_state_action">
+    </record>    
+    <record id="action_customs_state" model="ir.actions.act_window">
       <field name="name">Customs Status</field>
       <field name="res_model">fwdr.customs.state</field>
       <field name="view_mode">tree</field>
     </record>
 
+    <!-- view: Reference Type -->    
+    <record id="view_reference_type_tree" model="ir.ui.view">
+      <field name="name">Reference Type</field>
+      <field name="model">fwdr.reference.type</field>
+      <field name="arch" type="xml">
+        <tree editable="top" string="Reference Type" delete="false" default_order="name aesc">          
+          <field name="name"/> 
+          <field name="active" invisible="1"/>                      
+        </tree>
+      </field>
+    </record>    
+    <record id="action_reference_type" model="ir.actions.act_window">
+      <field name="name">Reference Type</field>
+      <field name="res_model">fwdr.reference.type</field>
+      <field name="view_mode">tree</field>
+    </record>    
 
-    <!-- tree view: SCAC Code -->    
-    <record model="ir.ui.view" id="scac_code_tree">
+
+    <!-- view: SCAC Code -->    
+    <record id="view_scac_code_tree" model="ir.ui.view">
       <field name="name">SCAC Code</field>
       <field name="model">fwdr.scac.code</field>
       <field name="arch" type="xml">
         <tree editable="top" string="SCAC Code" delete="false" default_order="name aesc">          
-          <field name="name"/>                            
+          <field name="name"/>            
+          <field name="carrier_id"/>
+          <field name="active" invisible="1"/>
         </tree>
       </field>
     </record>
-
-    <!-- actions: SCAC Code -->    
-    <record model="ir.actions.act_window" id="scac_code_action">
+    <record id="action_scac_code" model="ir.actions.act_window">
       <field name="name">Transit Type</field>
       <field name="res_model">fwdr.scac.code</field>
       <field name="view_mode">tree</field>
@@ -224,7 +234,7 @@
 
 
     <!-- tree view: Transit Type -->    
-    <record model="ir.ui.view" id="transit_type_tree">
+    <record id="viewtransit_type_tree" model="ir.ui.view" >
       <field name="name">Transit Type</field>
       <field name="model">fwdr.transit.type</field>
       <field name="arch" type="xml">
@@ -233,17 +243,15 @@
           <field name="seqence" widget="handle"/>          
         </tree>
       </field>
-    </record>
-
-    <!-- actions: Transit Type -->    
-    <record model="ir.actions.act_window" id="transit_type_action">
+    </record>   
+    <record id="action_transit_type" model="ir.actions.act_window" >
       <field name="name">Transit Type</field>
       <field name="res_model">fwdr.transit.type</field>
       <field name="view_mode">tree</field>
     </record>
 
-    <!-- tree view: Traffic Mode -->    
-    <record model="ir.ui.view" id="traffic_mode_tree">
+    <!-- view: Traffic Mode -->    
+<!--     <record id="view_traffic_mode_tree" model="ir.ui.view" >
       <field name="name">Traffic Mode</field>
       <field name="model">fwdr.traffic.mode</field>
       <field name="arch" type="xml">
@@ -253,56 +261,62 @@
         </tree>
       </field>
     </record>
-
-    <!-- actions: Traffic Mode -->    
-    <record model="ir.actions.act_window" id="traffic_mode_action">
+    <record id="action_traffic_mode" model="ir.actions.act_window" >
       <field name="name">Traffic Mode</field>
       <field name="res_model">fwdr.traffic.mode</field>
       <field name="view_mode">tree</field>
-    </record>
+    </record> -->
 
 
-    <!-- tree view: Traffic Term -->    
-    <record model="ir.ui.view" id="traffic_term_tree">
+    <!-- view: Traffic Term -->    
+    <record id="view_traffic_term_tree" model="ir.ui.view">
       <field name="name">Traffic Term</field>
       <field name="model">fwdr.traffic.term</field>
       <field name="arch" type="xml">
         <tree editable="bottom" string="Traffic Term" delete="false" default_order="seqence aesc">          
           <field name="name"/>                    
-          <field name="seqence" widget="handle"/>          
+          <field name="seqence" widget="handle"/> 
+          <field name="active" invisible="1"/>         
         </tree>
       </field>
     </record>
-
-    <!-- actions: Traffic Term -->    
-    <record model="ir.actions.act_window" id="traffic_term_action">
+    <record id="action_traffic_term" model="ir.actions.act_window">
       <field name="name">Traffic Term</field>
       <field name="res_model">fwdr.traffic.term</field>
       <field name="view_mode">tree</field>
     </record>
 
-    <!-- tree view: Cargo Nature -->    
-    <record model="ir.ui.view" id="cargo_nature_tree">
+    <!-- view: Cargo Nature -->    
+    <record id="view_cargo_nature_tree" model="ir.ui.view">
       <field name="name">Cargo Nature</field>
       <field name="model">fwdr.cargo.nature</field>
       <field name="arch" type="xml">
         <tree editable="bottom" string="Cargo Nature" delete="false" default_order="seqence aesc">          
           <field name="code"/>
           <field name="name"/>                    
-          <field name="seqence" widget="handle"/>          
+          <field name="seqence" widget="handle"/>  
+          <field name="active" invisible="1"/>
         </tree>
       </field>
     </record>
-
-    <!-- actions: Cargo Nature -->    
-    <record model="ir.actions.act_window" id="cargo_nature_action">
+    <record id="action_cargo_nature" model="ir.actions.act_window">
       <field name="name">Cargo Nature</field>
       <field name="res_model">fwdr.cargo.nature</field>
       <field name="view_mode">tree</field>
     </record>
 
-
-    <!-- Transit Category -->
+    <!-- view: Transit Category -->
+<!--     <record id="view_transit_category_tree" model="ir.ui.view">
+        <field name="name">fwdr.transit.category.tree</field>
+        <field name="model">fwdr.transit.category</field>
+        <field eval="6" name="priority"/>
+        <field name="arch" type="xml">
+            <tree string="Transit Category">
+                <field name="display_name"/>
+                <field name="active" invisible="1"/>
+            </tree>
+        </field>
+    </record>
     <record id="view_transit_category_form" model="ir.ui.view">
         <field name="name">fwdr.transit.category.form</field>
         <field name="model">fwdr.transit.category</field>
@@ -314,16 +328,6 @@
                     <field name="parent_id"/>
                 </group>
             </form>
-        </field>
-    </record>
-    <record id="view_transit_category_tree" model="ir.ui.view">
-        <field name="name">fwdr.transit.category.tree</field>
-        <field name="model">fwdr.transit.category</field>
-        <field eval="6" name="priority"/>
-        <field name="arch" type="xml">
-            <tree string="Transit Category">
-                <field name="display_name"/>
-            </tree>
         </field>
     </record>
     <record id="action_transit_category_form" model="ir.actions.act_window">
@@ -340,7 +344,7 @@
                 A job or a shipment may have several transit types and transit types have a hierarchical structure: a job or a shipment with a transit type has also the parent type.
             </p>
         </field>
-    </record>
+    </record> -->
 
 
     <!-- Top menu item -->    
@@ -359,27 +363,31 @@
 
     <!-- menu Carrier -->
     <menuitem name="Lines" id="menu_lines" parent="menu_carrier"
-              action="carrier_action"/>
+              action="action_carrier"/>
     <menuitem name="Air Lines" id="menu_airlines" parent="menu_carrier"
-              action="carrier_action1"/>
+              action="action_carrier1"/>
 
     <!-- menu Service -->
-    <menuitem name="Transit Type" id="menu_transit_type" parent="menu_service"
-              action="transit_type_action"/>
-    <menuitem name="Transit Category" id="menu_transit_category" parent="menu_service"
-              action="action_transit_category_form"/>
-    <menuitem name="Traffic Mode" id="menu_traffic_mode" parent="menu_service"
-              action="traffic_mode_action"/>                  
+<!--     <menuitem name="Transit Type" id="menu_transit_type" parent="menu_service"
+              action="transit_type_action"/> -->
+    <menuitem name="Transit Type" id="menu_transit_category" parent="menu_service"
+              action="action_transit_type"/>
+    <!-- <menuitem name="Traffic Mode" id="menu_traffic_mode" parent="menu_service"
+              action="action_traffic_mode"/>                   -->
     <menuitem name="Traffic Term" id="menu_traffic_term" parent="menu_service"
-              action="traffic_term_action"/>
+              action="action_traffic_term"/>
     <menuitem name="Customs Status" id="menu_customs_status" parent="menu_service"
-              action="customs_state_action"/>  
-     <menuitem name="SCAC Code" id="menu_scac" parent="menu_service"
-              action="scac_code_action"/>   
+              action="action_customs_state"/>  
+    <menuitem name="Reference Type" id="menu_ref_type" parent="menu_service"
+              action="action_reference_type"/>              
+    <menuitem name="SCAC Code" id="menu_scac" parent="menu_service"
+              action="action_scac_code"/>   
     <menuitem name="Cargo Nature" id="menu_cargo nature" parent="menu_service"
-              action="cargo_nature_action"/>                                        
+              action="action_cargo_nature"/>                                        
     <menuitem name="Container Type" id="menu_cntr_type" parent="menu_service"
-              action="container_type_action"/>                
+              action="action_container_type"/> 
+    <menuitem name="Units of Measure Category" id="menu_uom_categ" parent="menu_service"
+              action="product.product_uom_categ_form_action"/>                               
     <menuitem name="Units of Measure" id="menu_uom" parent="menu_service"
               action="product.product_uom_form_action"/>          
               
